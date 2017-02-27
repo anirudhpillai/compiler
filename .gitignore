@@ -2,3 +2,5 @@
 out/
 bin/*
 *~
+src/Lexer.java
+src/Parser.java
