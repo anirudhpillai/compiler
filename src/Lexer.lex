@@ -102,6 +102,8 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     "/"                { System.out.print(" / ");  return symbol(sym.DIVIDE); }
     "("                { System.out.print(" ( ");  return symbol(sym.L_ROUND); }
     ")"                { System.out.print(" ) ");  return symbol(sym.R_ROUND); }
+    "{"                { System.out.print(" { ");  return symbol(sym.L_CURLY); }
+    "}"                { System.out.print(" } ");  return symbol(sym.R_CURLY); }
     "^"                { System.out.print(" ^ "); return symbol(sym.CARET); }
 
     //hmm
@@ -140,7 +142,6 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     {DecIntegerLiteral}          { System.out.print(yytext()); return symbol(sym.NUMBER, new Integer(yytext())); }
     {DecIntegerIdentifier}       { System.out.print(yytext()); return symbol(sym.ID, new Integer(1));}
     {WhiteSpace}       { /* just skip what was found, do nothing */ }
-    "_"                { System.out.print(" _ "); return symbol(sym.UNDERSCORE); }
 }
 
 
