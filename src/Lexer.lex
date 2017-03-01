@@ -37,22 +37,8 @@ import java_cup.runtime.*;
   in the Lexical Rules Section.
 */
 
-LineTerminator = \r|\n|\r\n
-WhiteSpace     = {LineTerminator} | [ \t\f]
-
 Letter = [A-Za-z]
 Digit = [0-9]
-InputCharacter = [^\r\n]
-
-// Comment
-EndOfLineComment = "#"{InputCharacter}*{LineTerminator}?
-MultiLineComment = "/#" [^#] ~"#/" | "/#" "#"+ "/"
-
-Comment = {EndOfLineComment} | {MultiLineComment}
-
-// Identifier
-ValidChars = "_" | Letter | Digit
-Identifier = {Letter}{ValidChars}*
 
 // Character
 Punctuation = [!\"#\$%&\'()\*\+\,\-\.\/:;<=>\?@\[\]\\\^_`{}\~¦]
@@ -67,6 +53,28 @@ Rational = ({Integer}_){Digit}"/"{Digit}* | {Integer}"/"{Digit}*
 
 Number = {Integer} | {Rational} | {Float}
 
+// Spaces
+LineTerminator = \r|\n|\r\n
+InputCharacter = [^\r\n]
+WhiteSpace     = {LineTerminator} | [ \t\f] //line terminator, space, tab, or line feed.
+
+// Comments
+Comment = {MultilineComment} | {EndOfLineComment}
+MultilineComment = "/#" [^#] ~"#/" | "/#" "#" + "/"
+EndOfLineComment = "#" {InputCharacter}* {LineTerminator}?
+
+// Identifier
+//jletterdigit predefined by flex
+AlphanumericUnderscore = [:jletterdigit:] | "_"
+Identifier = [:jletter:]{AlphanumericUnderscore}*
+
+//Decimal integers
+DecIntegerLiteral = 0 | [1-9][0-9]*
+DecIntegerIdentifier = [A-Za-z_][A-Za-z_0-9]*
+
+SingleCharacter = [:jletterdigit:] | \p{Punctuation}
+
+%state STRING, CHAR
 
 %%
 /* ------------------------Lexical Rules Section---------------------- */
@@ -81,16 +89,58 @@ Number = {Integer} | {Rational} | {Float}
    the start state YYINITIAL. */
 
 <YYINITIAL> {
-    /* Return the token SEMI declared in the class sym that was found. */
-    ";"                { return symbol(sym.SEMI); }
 
-    "+"                { System.out.print(" + "); return symbol(sym.PLUS); }
-    "-"                { System.out.print(" - "); return symbol(sym.MINUS); }
-    "*"                { System.out.print(" * "); return symbol(sym.TIMES); }
-    "/"                { System.out.print(" / "); return symbol(sym.DIVIDE); }
-    "("                { System.out.print(" ( "); return symbol(sym.LPAREN); }
-    ")"                { System.out.print(" ) "); return symbol(sym.RPAREN); }
+    //End statement
+    ";"                { System.out.print(" ; ");  return symbol(sym.SEMI); }
 
+    //Operators
+    "="                { System.out.print(" = ");  return symbol(sym.EQ); }
+    "=="               { System.out.print(" == "); return symbol(sym.EQEQ); }
+    "+"                { System.out.print(" + ");  return symbol(sym.PLUS); }
+    "-"                { System.out.print(" - ");  return symbol(sym.MINUS); }
+    "*"                { System.out.print(" * ");  return symbol(sym.TIMES); }
+    "/"                { System.out.print(" / ");  return symbol(sym.DIVIDE); }
+    "("                { System.out.print(" ( ");  return symbol(sym.L_ROUND); }
+    ")"                { System.out.print(" ) ");  return symbol(sym.R_ROUND); }
+    "^"                { System.out.print(" ^ "); return symbol(sym.CARET); }
+
+    //hmm
+
+    //Types
+    "int"              { System.out.print(" int ");     return symbol(sym.INTEGER); }
+    "bool"             { System.out.print(" bool ");    return symbol(sym.BOOLEAN); }
+    "char"             { System.out.print(" char ");    return symbol(sym.CHARACTER); }
+    "rat"              { System.out.print(" rat ");     return symbol(sym.RATIONAL); }
+    "float"            { System.out.print(" float ");   return symbol(sym.FLOAT); }
+    "dict"             { System.out.print(" dict ");    return symbol(sym.DICTIONARY); }
+    "seq"              { System.out.print(" seq ");     return symbol(sym.SEQUENCE); }
+    "void"             { System.out.print(" void ");    return symbol(sym.VOID); }
+
+    //Special words
+    "main"             { System.out.print(" main ");   return symbol(sym.MAIN); }
+    "len"              { System.out.print(" len ");    return symbol(sym.LEN); }
+    "tdef"             { System.out.print(" tdef ");   return symbol(sym.TYPEDEF); }
+    "fdef"             { System.out.print(" fdef ");   return symbol(sym.FUNCTION_DEF); }
+    "while"            { System.out.print(" while ");  return symbol(sym.WHILE); }
+    "forall"           { System.out.print(" forall "); return symbol(sym.FORALL); }
+    "in"               { System.out.print(" in ");     return symbol(sym.IN); }
+    "alias"            { System.out.print(" alias ");  return symbol(sym.ALIAS); }
+    "if"               { System.out.print(" if ");     return symbol(sym.IF); }
+    "fi"               { System.out.print(" fi ");     return symbol(sym.FI); }
+    "then"             { System.out.print(" then ");   return symbol(sym.THEN); }
+    "elif"             { System.out.print(" elif ");   return symbol(sym.ELSE_IF); }
+    "else"             { System.out.print(" else ");   return symbol(sym.ELSE); }
+    "do"               { System.out.print(" do ");     return symbol(sym.DO); }
+    "od"               { System.out.print(" od ");     return symbol(sym.OD); }
+    "read"             { System.out.print(" read ");   return symbol(sym.READ); }
+    "print"            { System.out.print(" print ");  return symbol(sym.PRINT); }
+    "return"           { System.out.print(" return "); return symbol(sym.RETURN); }
+
+    //Literals
+    {DecIntegerLiteral}          { System.out.print(yytext()); return symbol(sym.NUMBER, new Integer(yytext())); }
+    {DecIntegerIdentifier}       { System.out.print(yytext()); return symbol(sym.ID, new Integer(1));}
+    {WhiteSpace}       { /* just skip what was found, do nothing */ }
+    "_"                { System.out.print(" _ "); return symbol(sym.UNDERSCORE); }
 }
 
 
