@@ -62,22 +62,28 @@ import java_cup.runtime.*;
   in the Lexical Rules Section.
 */
 
-/* A line terminator is a \r (carriage return), \n (line feed), or
-   \r\n. */
+// Spaces
 LineTerminator = \r|\n|\r\n
+InputCharacter = [^\r\n]
+WhiteSpace     = {LineTerminator} | [ \t\f] //line terminator, space, tab, or line feed.
 
-/* White space is a line terminator, space, tab, or line feed. */
-WhiteSpace     = {LineTerminator} | [ \t\f]
+// Comments
+Comment = {MultilineComment} | {EndOfLineComment}
+MultilineComment = "/#" [^#] ~"#/" | "/#" "#" + "/"
+EndOfLineComment = "#" {InputCharacter}* {LineTerminator}?
 
-/* A literal integer is is a number beginning with a number between
-   one and nine followed by zero or more numbers between zero and nine
-   or just a zero.  */
-dec_int_lit = 0 | [1-9][0-9]*
+// Identifier
+//jletterdigit predefined by flex
+AlphanumericUnderscore = [:jletterdigit:] | "_"
+Identifier = [:jletter:]{AlphanumericUnderscore}*
 
-/* A identifier integer is a word beginning a letter between A and
-   Z, a and z, or an underscore followed by zero or more letters
-   between A and Z, a and z, zero and nine, or an underscore. */
-dec_int_id = [A-Za-z_][A-Za-z_0-9]*
+//Decimal integers
+DecIntegerLiteral = 0 | [1-9][0-9]*
+DecIntegerIdentifier = [A-Za-z_][A-Za-z_0-9]*
+
+SingleCharacter = [:jletterdigit:] | \p{Punctuation}
+
+%state STRING, CHAR
 
 %%
 /* ------------------------Lexical Rules Section---------------------- */
@@ -93,33 +99,57 @@ dec_int_id = [A-Za-z_][A-Za-z_0-9]*
 
 <YYINITIAL> {
 
-    /* Return the token SEMI declared in the class sym that was found. */
-    ";"                { return symbol(sym.SEMI); }
+    //End statement
+    ";"                { System.out.print(" ; ");  return symbol(sym.SEMI); }
 
-    /* Print the token found that was declared in the class sym and then
-       return it. */
-    "+"                { System.out.print(" + "); return symbol(sym.PLUS); }
-    "-"                { System.out.print(" - "); return symbol(sym.MINUS); }
-    "*"                { System.out.print(" * "); return symbol(sym.TIMES); }
-    "/"                { System.out.print(" / "); return symbol(sym.DIVIDE); }
-    "("                { System.out.print(" ( "); return symbol(sym.LPAREN); }
-    ")"                { System.out.print(" ) "); return symbol(sym.RPAREN); }
+    //Operators
+    "="                { System.out.print(" = ");  return symbol(sym.EQ); }
+    "=="               { System.out.print(" == "); return symbol(sym.EQEQ); }
+    "+"                { System.out.print(" + ");  return symbol(sym.PLUS); }
+    "-"                { System.out.print(" - ");  return symbol(sym.MINUS); }
+    "*"                { System.out.print(" * ");  return symbol(sym.TIMES); }
+    "/"                { System.out.print(" / ");  return symbol(sym.DIVIDE); }
+    "("                { System.out.print(" ( ");  return symbol(sym.L_ROUND); }
+    ")"                { System.out.print(" ) ");  return symbol(sym.R_ROUND); }
+    "^"                { System.out.print(" ^ "); return symbol(sym.CARET); }
 
-    /* If an integer is found print it out, return the token NUMBER
-       that represents an integer and the value of the integer that is
-       held in the string yytext which will get turned into an integer
-       before returning */
-    {dec_int_lit}      { System.out.print(yytext());
-                         return symbol(sym.NUMBER, new Integer(yytext())); }
+    //hmm
 
-    /* If an identifier is found print it out, return the token ID
-       that represents an identifier and the default value one that is
-       given to all identifiers. */
-    {dec_int_id}       { System.out.print(yytext());
-                         return symbol(sym.ID, new Integer(1));}
+    //Types
+    "int"              { System.out.print(" int ");     return symbol(sym.INTEGER); }
+    "bool"             { System.out.print(" bool ");    return symbol(sym.BOOLEAN); }
+    "char"             { System.out.print(" char ");    return symbol(sym.CHARACTER); }
+    "rat"              { System.out.print(" rat ");     return symbol(sym.RATIONAL); }
+    "float"            { System.out.print(" float ");   return symbol(sym.FLOAT); }
+    "dict"             { System.out.print(" dict ");    return symbol(sym.DICTIONARY); }
+    "seq"              { System.out.print(" seq ");     return symbol(sym.SEQUENCE); }
+    "void"             { System.out.print(" void ");    return symbol(sym.VOID); }
 
-    /* Don't do anything if whitespace is found */
+    //Special words
+    "main"             { System.out.print(" main ");   return symbol(sym.MAIN); }
+    "len"              { System.out.print(" len ");    return symbol(sym.LEN); }
+    "tdef"             { System.out.print(" tdef ");   return symbol(sym.TYPEDEF); }
+    "fdef"             { System.out.print(" fdef ");   return symbol(sym.FUNCTION_DEF); }
+    "while"            { System.out.print(" while ");  return symbol(sym.WHILE); }
+    "forall"           { System.out.print(" forall "); return symbol(sym.FORALL); }
+    "in"               { System.out.print(" in ");     return symbol(sym.IN); }
+    "alias"            { System.out.print(" alias ");  return symbol(sym.ALIAS); }
+    "if"               { System.out.print(" if ");     return symbol(sym.IF); }
+    "fi"               { System.out.print(" fi ");     return symbol(sym.FI); }
+    "then"             { System.out.print(" then ");   return symbol(sym.THEN); }
+    "elif"             { System.out.print(" elif ");   return symbol(sym.ELSE_IF); }
+    "else"             { System.out.print(" else ");   return symbol(sym.ELSE); }
+    "do"               { System.out.print(" do ");     return symbol(sym.DO); }
+    "od"               { System.out.print(" od ");     return symbol(sym.OD); }
+    "read"             { System.out.print(" read ");   return symbol(sym.READ); }
+    "print"            { System.out.print(" print ");  return symbol(sym.PRINT); }
+    "return"           { System.out.print(" return "); return symbol(sym.RETURN); }
+
+    //Literals
+    {DecIntegerLiteral}          { System.out.print(yytext()); return symbol(sym.NUMBER, new Integer(yytext())); }
+    {DecIntegerIdentifier}       { System.out.print(yytext()); return symbol(sym.ID, new Integer(1));}
     {WhiteSpace}       { /* just skip what was found, do nothing */ }
+    "_"                { System.out.print(" _ "); return symbol(sym.UNDERSCORE); }
 }
 
 
