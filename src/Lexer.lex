@@ -94,7 +94,8 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     ";"                { System.out.print(" ; ");  return symbol(sym.SEMI); }
 
     //Operators
-    "="                { System.out.print(" = ");  return symbol(sym.EQ); }
+    ":="                { System.out.print(" = ");  return symbol(sym.EQ); }
+    ":"                { System.out.print(" : ");  return symbol(sym.COLON); }
     "=="               { System.out.print(" == "); return symbol(sym.EQEQ); }
     "+"                { System.out.print(" + ");  return symbol(sym.PLUS); }
     "-"                { System.out.print(" - ");  return symbol(sym.MINUS); }
@@ -104,7 +105,10 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     ")"                { System.out.print(" ) ");  return symbol(sym.R_ROUND); }
     "{"                { System.out.print(" { ");  return symbol(sym.L_CURLY); }
     "}"                { System.out.print(" } ");  return symbol(sym.R_CURLY); }
+    "<"                { System.out.print(" < ");  return symbol(sym.L_ANGLE); }
+    ">"                { System.out.print(" > ");  return symbol(sym.R_ANGLE); }
     "^"                { System.out.print(" ^ "); return symbol(sym.CARET); }
+    ","                { System.out.print(" , "); return symbol(sym.COMMA); }
 
     //hmm
 
@@ -114,8 +118,8 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     "char"             { System.out.print(" char ");    return symbol(sym.CHARACTER); }
     "rat"              { System.out.print(" rat ");     return symbol(sym.RATIONAL); }
     "float"            { System.out.print(" float ");   return symbol(sym.FLOAT); }
-    "dict"             { System.out.print(" dict ");    return symbol(sym.DICTIONARY); }
-    "seq"              { System.out.print(" seq ");     return symbol(sym.SEQUENCE); }
+    "dict"             { System.out.print(" dict ");    return symbol(sym.DICT); }
+    "seq"              { System.out.print(" seq ");     return symbol(sym.SEQ); }
     "void"             { System.out.print(" void ");    return symbol(sym.VOID); }
 
     //Special words
@@ -123,6 +127,7 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     "len"              { System.out.print(" len ");    return symbol(sym.LEN); }
     "tdef"             { System.out.print(" tdef ");   return symbol(sym.TYPEDEF); }
     "fdef"             { System.out.print(" fdef ");   return symbol(sym.FUNCTION_DEF); }
+    "top"              { System.out.print(" top ");   return symbol(sym.TOP); }
     "while"            { System.out.print(" while ");  return symbol(sym.WHILE); }
     "forall"           { System.out.print(" forall "); return symbol(sym.FORALL); }
     "in"               { System.out.print(" in ");     return symbol(sym.IN); }
@@ -141,6 +146,7 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     //Literals
     {DecIntegerLiteral}          { System.out.print(yytext()); return symbol(sym.NUMBER, new Integer(yytext())); }
     {DecIntegerIdentifier}       { System.out.print(yytext()); return symbol(sym.ID, new Integer(1));}
+    {Identifier}                 { System.out.print(yytext()); return symbol(sym.IDENTIFIER);}
     {WhiteSpace}       { /* just skip what was found, do nothing */ }
 }
 

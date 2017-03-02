@@ -47,14 +47,14 @@ parser code {:
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
 
 
-terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, CARET;
+terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, CARET, COLON, COMMA;
 
 // Brackets
-terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY;
+terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE;
 
 // Types
 terminal           INTEGER, BOOLEAN, CHARACTER, RATIONAL, FLOAT;
-terminal           DICTIONARY, SEQUENCE, VOID;
+terminal           DICT, SEQ, VOID, TOP;
 
 // Keywords
 terminal           MAIN, LEN, IN, ALIAS, READ, PRINT, RETURN;
@@ -64,12 +64,24 @@ terminal           TYPEDEF, FUNCTION_DEF;
 terminal           IF, FI, THEN, ELSE_IF, ELSE, WHILE, FORALL, DO, OD;
 
 // TODO
-terminal           ID, NUMBER;
+terminal           IDENTIFIER, ID, NUMBER;
 
 
-non terminal       main;
-non terminal       comment, identifier;
-non terminal       dict, seq, number, character;
-non terminal       declaration;
+// types
+non terminal       number, subtype, dicttype, seqtype, program;
+non terminal       program, main, function;
 
-main  ::=  MAIN L_CURLY R_CURLY SEMI;
+
+/* ------------Precedences----------- */
+
+
+/* ------------Grammar----------- */
+
+// types
+number ::= INTEGER | RATIONAL | FLOAT
+subtpe ::= number | BOOL | CHARACTER | TOP
+
+dicttype ::= DICT L_ANGLE subtype COMMA subtype COMMA R_ANGLE
+seqtype ::= SEQ L_ANGLE subtype R_ANGLE
+
+
