@@ -68,8 +68,6 @@ EndOfLineComment = "#" {InputCharacter}* {LineTerminator}?
 AlphanumericUnderscore = [:jletterdigit:] | "_"
 Identifier = [:jletter:]{AlphanumericUnderscore}*
 
-SingleCharacter = [:jletterdigit:] | \p{Punctuation}
-
 %state STRING, CHAR
 
 %%

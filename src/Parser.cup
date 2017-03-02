@@ -1,7 +1,7 @@
 /*
  * Docs here: https://www.cs.princeton.edu/~appel/modern/java/CUP/manual.html
 */
-   
+
 /* ----------------------Preliminary Declarations Section--------------------*/
 import java_cup.runtime.*;
 
@@ -41,9 +41,9 @@ parser code {:
         System.exit(1);
     }
 :};
-   
 
-   
+
+
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
 
 
@@ -91,7 +91,7 @@ declaration ::= IDENTIFIER COLON type SEMI
              |  IDENTIFIER COLON type EQ value SEMI;
 
 type ::= number | dicttype | seqtype | CHARACTER;
-value ::= dictvalue | seqvalue;
+value ::= dictvalue | seqvalue | NUMBER;
 
 // types
 number ::= INTEGER | RATIONAL | FLOAT;
