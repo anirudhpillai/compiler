@@ -50,7 +50,7 @@ parser code {:
 terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, CARET, COLON, COMMA;
 
 // Brackets
-terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE;
+terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE, L_SQUARE, R_SQUARE;
 
 // Types
 terminal           INTEGER, BOOLEAN, CHARACTER, RATIONAL, FLOAT;
@@ -68,8 +68,14 @@ terminal           IDENTIFIER, ID, NUMBER;
 
 
 // types
-non terminal       number, subtype, dicttype, seqtype, program;
-non terminal       program, main, function;
+non terminal       type, number, subtype, dicttype, seqtype;
+
+non terminal       declaration;
+
+// values
+non terminal       value, dictvalue, seqvalue;
+
+non terminal       program, main;
 
 
 /* ------------Precedences----------- */
@@ -77,11 +83,24 @@ non terminal       program, main, function;
 
 /* ------------Grammar----------- */
 
+program ::= main | declaration;
+
+main ::= MAIN L_CURLY R_CURLY SEMI;
+
+declaration ::= IDENTIFIER COLON type SEMI
+             |  IDENTIFIER COLON type EQ value SEMI;
+
+type ::= number | dicttype | seqtype | CHARACTER;
+value ::= dictvalue | seqvalue;
+
 // types
-number ::= INTEGER | RATIONAL | FLOAT
-subtpe ::= number | BOOL | CHARACTER | TOP
+number ::= INTEGER | RATIONAL | FLOAT;
+subtype ::= number | BOOLEAN | CHARACTER | TOP;
 
-dicttype ::= DICT L_ANGLE subtype COMMA subtype COMMA R_ANGLE
-seqtype ::= SEQ L_ANGLE subtype R_ANGLE
+dicttype ::= DICT L_ANGLE subtype COMMA subtype COMMA R_ANGLE;
+seqtype ::= SEQ L_ANGLE subtype R_ANGLE;
 
 
+// values
+dictvalue ::= L_CURLY R_CURLY SEMI;
+seqvalue ::= L_SQUARE R_SQUARE SEMI;

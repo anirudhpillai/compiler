@@ -94,7 +94,8 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     ";"                { System.out.print(" ; ");  return symbol(sym.SEMI); }
 
     //Operators
-    ":="                { System.out.print(" = ");  return symbol(sym.EQ); }
+
+    ":="               { System.out.print(" = ");  return symbol(sym.EQ); }
     ":"                { System.out.print(" : ");  return symbol(sym.COLON); }
     "=="               { System.out.print(" == "); return symbol(sym.EQEQ); }
     "+"                { System.out.print(" + ");  return symbol(sym.PLUS); }
@@ -105,6 +106,8 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     ")"                { System.out.print(" ) ");  return symbol(sym.R_ROUND); }
     "{"                { System.out.print(" { ");  return symbol(sym.L_CURLY); }
     "}"                { System.out.print(" } ");  return symbol(sym.R_CURLY); }
+    "["                { System.out.print(" [ ");  return symbol(sym.L_SQUARE); }
+    "]"                { System.out.print(" ] ");  return symbol(sym.R_SQUARE); }
     "<"                { System.out.print(" < ");  return symbol(sym.L_ANGLE); }
     ">"                { System.out.print(" > ");  return symbol(sym.R_ANGLE); }
     "^"                { System.out.print(" ^ "); return symbol(sym.CARET); }
@@ -144,10 +147,8 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     "return"           { System.out.print(" return "); return symbol(sym.RETURN); }
 
     //Literals
-    {DecIntegerLiteral}          { System.out.print(yytext()); return symbol(sym.NUMBER, new Integer(yytext())); }
-    {DecIntegerIdentifier}       { System.out.print(yytext()); return symbol(sym.ID, new Integer(1));}
     {Identifier}                 { System.out.print(yytext()); return symbol(sym.IDENTIFIER);}
-    {WhiteSpace}       { /* just skip what was found, do nothing */ }
+    {WhiteSpace}                 { /* just skip what was found, do nothing */ }
 }
 
 
