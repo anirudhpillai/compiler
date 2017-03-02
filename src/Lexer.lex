@@ -95,7 +95,7 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
 
     //Operators
 
-    ":="               { System.out.print(" = ");  return symbol(sym.EQ); }
+    ":="               { System.out.print(" := ");  return symbol(sym.EQ); }
     ":"                { System.out.print(" : ");  return symbol(sym.COLON); }
     "=="               { System.out.print(" == "); return symbol(sym.EQEQ); }
     "+"                { System.out.print(" + ");  return symbol(sym.PLUS); }
@@ -109,7 +109,7 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     "["                { System.out.print(" [ ");  return symbol(sym.L_SQUARE); }
     "]"                { System.out.print(" ] ");  return symbol(sym.R_SQUARE); }
     "<"                { System.out.print(" < ");  return symbol(sym.L_ANGLE); }
-    ">"                { System.out.print(" > ");  return symbol(sym.R_ANGLE); }
+    ">"                { System.out.print(" > ");  return symbol(sym.L_ANGLE); }
     "^"                { System.out.print(" ^ "); return symbol(sym.CARET); }
     ","                { System.out.print(" , "); return symbol(sym.COMMA); }
 
@@ -141,12 +141,13 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     "elif"             { System.out.print(" elif ");   return symbol(sym.ELSE_IF); }
     "else"             { System.out.print(" else ");   return symbol(sym.ELSE); }
     "do"               { System.out.print(" do ");     return symbol(sym.DO); }
-    "od"               { System.out.print(" od ");     return symbol(sym.OD); }
+    "od"               { System.out.print(" od ");     return symbol(sym.DO); }
     "read"             { System.out.print(" read ");   return symbol(sym.READ); }
     "print"            { System.out.print(" print ");  return symbol(sym.PRINT); }
     "return"           { System.out.print(" return "); return symbol(sym.RETURN); }
 
     //Literals
+    {Number}           { System.out.print(" Number "); return symbol(sym.NUMBER); }
     {Identifier}                 { System.out.print(yytext()); return symbol(sym.IDENTIFIER);}
     {WhiteSpace}                 { /* just skip what was found, do nothing */ }
 }
