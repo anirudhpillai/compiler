@@ -73,7 +73,7 @@ non terminal       type, number, subtype, dicttype, seqtype;
 non terminal       declaration;
 
 // values
-non terminal       value, dictvalue, seqvalue;
+non terminal       value, dictvalue, seqvalue, dictitems, seqitems, val;
 
 non terminal       program, main;
 
@@ -83,7 +83,7 @@ non terminal       program, main;
 
 /* ------------Grammar----------- */
 
-program ::= main | declaration;
+program ::= main | declaration program |;
 
 main ::= MAIN L_CURLY R_CURLY SEMI;
 
@@ -97,10 +97,15 @@ value ::= dictvalue | seqvalue;
 number ::= INTEGER | RATIONAL | FLOAT;
 subtype ::= number | BOOLEAN | CHARACTER | TOP;
 
-dicttype ::= DICT L_ANGLE subtype COMMA subtype COMMA R_ANGLE;
+dicttype ::= DICT L_ANGLE subtype COMMA subtype R_ANGLE;
 seqtype ::= SEQ L_ANGLE subtype R_ANGLE;
 
 
 // values
-dictvalue ::= L_CURLY R_CURLY SEMI;
-seqvalue ::= L_SQUARE R_SQUARE SEMI;
+val ::= NUMBER | CHARACTER;
+
+dictvalue ::= L_CURLY dictitems R_CURLY | L_CURLY R_CURLY;
+dictitems ::= val COLON val | val COLON val COMMA dictitems;
+
+seqvalue ::= L_SQUARE seqitems R_SQUARE | L_SQUARE R_SQUARE;
+seqitems ::= val | val COMMA seqitems;

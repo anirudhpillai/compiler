@@ -68,10 +68,6 @@ EndOfLineComment = "#" {InputCharacter}* {LineTerminator}?
 AlphanumericUnderscore = [:jletterdigit:] | "_"
 Identifier = [:jletter:]{AlphanumericUnderscore}*
 
-//Decimal integers
-DecIntegerLiteral = 0 | [1-9][0-9]*
-DecIntegerIdentifier = [A-Za-z_][A-Za-z_0-9]*
-
 SingleCharacter = [:jletterdigit:] | \p{Punctuation}
 
 %state STRING, CHAR
@@ -95,7 +91,7 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
 
     //Operators
 
-    ":="               { System.out.print(" = ");  return symbol(sym.EQ); }
+    ":="               { System.out.print(" := ");  return symbol(sym.EQ); }
     ":"                { System.out.print(" : ");  return symbol(sym.COLON); }
     "=="               { System.out.print(" == "); return symbol(sym.EQEQ); }
     "+"                { System.out.print(" + ");  return symbol(sym.PLUS); }
@@ -147,8 +143,10 @@ SingleCharacter = [:jletterdigit:] | \p{Punctuation}
     "return"           { System.out.print(" return "); return symbol(sym.RETURN); }
 
     //Literals
-    {Identifier}                 { System.out.print(yytext()); return symbol(sym.IDENTIFIER);}
-    {WhiteSpace}                 { /* just skip what was found, do nothing */ }
+    {Number}           { System.out.print(yytext());  return symbol(sym.NUMBER); }
+    {Character}        { System.out.print(yytext()); return symbol(sym.CHARACTER); }
+    {Identifier}       { System.out.print(yytext()); return symbol(sym.IDENTIFIER);}
+    {WhiteSpace}       { /* just skip what was found, do nothing */ }
 }
 
 
