@@ -52,6 +52,8 @@ terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, CARET, COLON, COM
 // Brackets
 terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE, L_SQUARE, R_SQUARE;
 
+terminal           L_ANGLE_EQ, R_ANGLE_EQ, AND, OR, NOT, NOT_EQ;
+
 // Types
 terminal           INTEGER, BOOLEAN, CHARACTER, RATIONAL, FLOAT;
 terminal           DICT, SEQ, VOID, TOP;
@@ -77,13 +79,17 @@ non terminal       value, dictvalue, seqvalue, dictitems, seqitems, val;
 
 non terminal       program, main;
 
+non terminal       expression, operator, comparator;
+
 
 /* ------------Precedences----------- */
-
+precedence left OR, PLUS, MINUS;
+precedence left AND, TIMES, DIVIDE;
+precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 
 /* ------------Grammar----------- */
 
-program ::= main | declaration program |;
+program ::= main | declaration program | expression program |;
 
 main ::= MAIN L_CURLY R_CURLY SEMI;
 
@@ -100,7 +106,6 @@ subtype ::= number | BOOLEAN | CHARACTER | TOP;
 dicttype ::= DICT L_ANGLE subtype COMMA subtype R_ANGLE;
 seqtype ::= SEQ L_ANGLE subtype R_ANGLE;
 
-
 // values
 val ::= NUMBER | CHARACTER;
 
@@ -109,3 +114,12 @@ dictitems ::= val COLON val | val COLON val COMMA dictitems;
 
 seqvalue ::= L_SQUARE seqitems R_SQUARE | L_SQUARE R_SQUARE;
 seqitems ::= val | val COMMA seqitems;
+
+operator ::= PLUS | MINUS | TIMES | DIVIDE;
+comparator ::= AND | OR | EQEQ | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
+
+expression ::= NUMBER
+            |  NUMBER operator expression
+            |  expression comparator expression
+            |  NOT expression
+            |  L_ROUND expression R_ROUND;

@@ -92,6 +92,10 @@ Identifier = [:jletter:]{AlphanumericUnderscore}*
     ":="               { System.out.print(" := ");  return symbol(sym.EQ); }
     ":"                { System.out.print(" : ");  return symbol(sym.COLON); }
     "=="               { System.out.print(" == "); return symbol(sym.EQEQ); }
+    "!="               { System.out.print(" != "); return symbol(sym.NOT_EQ); }
+    "&&"               { System.out.print(" && ");  return symbol(sym.AND); }
+    "||"               { System.out.print(" || ");  return symbol(sym.OR); }
+    "!"                { System.out.print(" ! ");  return symbol(sym.NOT); }
     "+"                { System.out.print(" + ");  return symbol(sym.PLUS); }
     "-"                { System.out.print(" - ");  return symbol(sym.MINUS); }
     "*"                { System.out.print(" * ");  return symbol(sym.TIMES); }
@@ -102,6 +106,8 @@ Identifier = [:jletter:]{AlphanumericUnderscore}*
     "}"                { System.out.print(" } ");  return symbol(sym.R_CURLY); }
     "["                { System.out.print(" [ ");  return symbol(sym.L_SQUARE); }
     "]"                { System.out.print(" ] ");  return symbol(sym.R_SQUARE); }
+    "<="               { System.out.print(" < ");  return symbol(sym.L_ANGLE_EQ); }
+    ">="               { System.out.print(" > ");  return symbol(sym.R_ANGLE_EQ); }
     "<"                { System.out.print(" < ");  return symbol(sym.L_ANGLE); }
     ">"                { System.out.print(" > ");  return symbol(sym.R_ANGLE); }
     "^"                { System.out.print(" ^ "); return symbol(sym.CARET); }
