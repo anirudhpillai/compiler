@@ -77,7 +77,7 @@ non terminal       declaration;
 // values
 non terminal       value, dictvalue, seqvalue, dictitems, seqitems, val;
 
-non terminal       program, main;
+non terminal       program, main, codeblock;
 
 non terminal       expression, operator, comparator;
 
@@ -92,6 +92,9 @@ precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 program ::= main | declaration program | expression program |;
 
 main ::= MAIN L_CURLY R_CURLY SEMI;
+
+codeblock ::= expression codeblock | declaration codeblock
+            | ;
 
 declaration ::= IDENTIFIER COLON type SEMI
              |  IDENTIFIER COLON type EQ value SEMI;
