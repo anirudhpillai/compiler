@@ -131,8 +131,6 @@ Identifier = [:jletter:]{AlphanumericUnderscore}*
     "tdef"             { System.out.print(" tdef ");   return symbol(sym.TYPEDEF); }
     "fdef"             { System.out.print(" fdef ");   return symbol(sym.FUNCTION_DEF); }
     "top"              { System.out.print(" top ");   return symbol(sym.TOP); }
-    "while"            { System.out.print(" while ");  return symbol(sym.WHILE); }
-    "forall"           { System.out.print(" forall "); return symbol(sym.FORALL); }
     "in"               { System.out.print(" in ");     return symbol(sym.IN); }
     "alias"            { System.out.print(" alias ");  return symbol(sym.ALIAS); }
     "if"               { System.out.print(" if ");     return symbol(sym.IF); }
@@ -146,6 +144,9 @@ Identifier = [:jletter:]{AlphanumericUnderscore}*
     "print"            { System.out.print(" print ");  return symbol(sym.PRINT); }
     "return"           { System.out.print(" return "); return symbol(sym.RETURN); }
     "break"            { System.out.print(" return "); return symbol(sym.BREAK); }
+    "loop"             { System.out.print(" loop "); return symbol(sym.LOOP); }
+    "pool"             { System.out.print(" pool "); return symbol(sym.POOL); }
+
 
     //Literals
     {Number}           { System.out.print(yytext());  return symbol(sym.NUMBER); }

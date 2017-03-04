@@ -16,30 +16,6 @@ parser code {:
             + current_token.right, null
         );
     }
-
-    public void report_error(String message, Object info) {
-
-        StringBuilder m = new StringBuilder("Error");
-
-        if (info instanceof java_cup.runtime.Symbol) {
-            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
-
-            if (s.left >= 0) {
-                m.append(" in line "+(s.left+1));
-                if (s.right >= 0)
-                    m.append(", column "+(s.right+1));
-            }
-        }
-
-        m.append(" : "+message);
-
-        System.err.println(m);
-    }
-
-    public void report_fatal_error(String message, Object info) {
-        report_error(message, info);
-        System.exit(1);
-    }
 :};
 
 
@@ -63,7 +39,7 @@ terminal           MAIN, LEN, IN, ALIAS, READ, PRINT, RETURN, BREAK;
 
 terminal           TYPEDEF, FUNCTION_DEF;
 
-terminal           IF, FI, THEN, ELSE_IF, ELSE, WHILE, FORALL, DO, OD;
+terminal           IF, FI, THEN, ELSE_IF, ELSE, FORALL, DO, OD, LOOP, POOL;
 
 // TODO
 terminal           IDENTIFIER, ID, NUMBER;
@@ -78,9 +54,11 @@ non terminal       value, dictvalue, seqvalue, dictitems, seqitems, val;
 
 non terminal       program, main, codeblock;
 
-non terminal       break;
+non terminal       break, loop;
 
 non terminal       expression, operator, comparator;
+
+non terminal       read, print;
 
 non terminal       if_statement;
 
@@ -93,11 +71,17 @@ precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 /* ------------Grammar----------- */
 
 
-program ::= main | declaration program | expression program | if_statement program | break program |;
+program ::= main | declaration program | expression program | if_statement program
+        | break program
+        | loop program
+        | read program
+        | print program
+        |;
 
 main ::= MAIN L_CURLY R_CURLY SEMI;
 
 codeblock ::= expression codeblock | declaration codeblock
+            | loop codeblock
             | ;
 
 declaration ::= IDENTIFIER COLON type SEMI
@@ -105,6 +89,8 @@ declaration ::= IDENTIFIER COLON type SEMI
 
 type ::= number | dicttype | seqtype | CHARACTER;
 value ::= dictvalue | seqvalue | NUMBER;
+
+loop ::= LOOP codeblock POOL | LOOP codeblock break codeblock POOL;
 
 // types
 number ::= INTEGER | RATIONAL | FLOAT;
@@ -125,12 +111,19 @@ seqitems ::= val | val COMMA seqitems;
 operator ::= PLUS | MINUS | TIMES | DIVIDE;
 comparator ::= AND | OR | EQEQ | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
 
+print ::= PRINT expression SEMI;
+
+read ::= READ IDENTIFIER SEMI;
+
 expression ::= IDENTIFIER
             |  NUMBER
             |  NUMBER operator expression
             |  expression comparator expression
             |  NOT expression
-            |  L_ROUND expression R_ROUND;
+            |  L_ROUND expression R_ROUND
+            |  val IN IDENTIFIER
+            |  val IN dictvalue
+            ;
 
 break ::= BREAK SEMI | BREAK NUMBER SEMI;
 
