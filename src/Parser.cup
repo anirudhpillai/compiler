@@ -63,7 +63,7 @@ terminal           MAIN, LEN, IN, ALIAS, READ, PRINT, RETURN, BREAK;
 
 terminal           TYPEDEF, FUNCTION_DEF;
 
-terminal           IF, FI, THEN, ELSE_IF, ELSE, WHILE, FORALL, DO, OD;
+terminal           IF, FI, THEN, ELSE_IF, ELSE, FORALL, DO, OD, LOOP, POOL;
 
 // TODO
 terminal           IDENTIFIER, ID, NUMBER;
@@ -78,7 +78,7 @@ non terminal       value, dictvalue, seqvalue, dictitems, seqitems, val;
 
 non terminal       program, main, codeblock;
 
-non terminal       break;
+non terminal       break, loop;
 
 non terminal       expression, operator, comparator;
 
@@ -93,11 +93,15 @@ precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 /* ------------Grammar----------- */
 
 
-program ::= main | declaration program | expression program | if_statement program | break program |;
+program ::= main | declaration program | expression program | if_statement program
+        | break program
+        | loop program 
+        |;
 
 main ::= MAIN L_CURLY R_CURLY SEMI;
 
 codeblock ::= expression codeblock | declaration codeblock
+            | loop codeblock
             | ;
 
 declaration ::= IDENTIFIER COLON type SEMI
@@ -105,6 +109,8 @@ declaration ::= IDENTIFIER COLON type SEMI
 
 type ::= number | dicttype | seqtype | CHARACTER;
 value ::= dictvalue | seqvalue | NUMBER;
+
+loop ::= LOOP codeblock POOL | LOOP codeblock break codeblock POOL;
 
 // types
 number ::= INTEGER | RATIONAL | FLOAT;
