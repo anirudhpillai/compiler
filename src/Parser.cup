@@ -16,30 +16,6 @@ parser code {:
             + current_token.right, null
         );
     }
-
-    public void report_error(String message, Object info) {
-
-        StringBuilder m = new StringBuilder("Error");
-
-        if (info instanceof java_cup.runtime.Symbol) {
-            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
-
-            if (s.left >= 0) {
-                m.append(" in line "+(s.left+1));
-                if (s.right >= 0)
-                    m.append(", column "+(s.right+1));
-            }
-        }
-
-        m.append(" : "+message);
-
-        System.err.println(m);
-    }
-
-    public void report_fatal_error(String message, Object info) {
-        report_error(message, info);
-        System.exit(1);
-    }
 :};
 
 
@@ -144,7 +120,10 @@ expression ::= IDENTIFIER
             |  NUMBER operator expression
             |  expression comparator expression
             |  NOT expression
-            |  L_ROUND expression R_ROUND;
+            |  L_ROUND expression R_ROUND
+            |  val IN IDENTIFIER
+            |  val IN dictvalue
+            ;
 
 break ::= BREAK SEMI | BREAK NUMBER SEMI;
 
