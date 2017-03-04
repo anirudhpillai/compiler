@@ -47,8 +47,6 @@ terminal           IDENTIFIER, NUMBER;
 // types
 non terminal       type, number, subtype, dicttype, seqtype;
 
-non terminal       primitive_data_type, aggregate_data_type, return_type;
-
 non terminal       assignment, declaration, params, _params;
 
 // values
@@ -64,7 +62,7 @@ non terminal       read, print;
 
 non terminal       if_statement, return_statement;
 
-non terminal       function;
+non terminal       function, return_type;
 
 
 /* ------------Precedences----------- */
@@ -113,22 +111,9 @@ subtype ::= number | BOOLEAN | CHARACTER | TOP;
 dicttype ::= DICT L_ANGLE subtype COMMA subtype R_ANGLE;
 seqtype ::= SEQ L_ANGLE subtype R_ANGLE;
 
-primitive_data_type ::= INTEGER
-                    | BOOLEAN
-                    | CHARACTER
-                    | RATIONAL
-                    | FLOAT
-                    ;
-
-aggregate_data_type ::= dicttype
-                    | seqtype
-                    ;
-
-
 // values
 
-// TODO: Need to handle case where
-// a variable can be assigned value after calculation
+// TODO: Need to handle case where a variable can be assigned value after calculation
 // a : int := 4-5;
 // a : bool := 2 - 2314 * -7 && 2 / 5;
 
@@ -173,8 +158,4 @@ return_statement ::= RETURN SEMI | RETURN expression SEMI;
 
 //Functions
 function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY COLON return_type SEMI;
-
-return_type ::= primitive_data_type
-              | aggregate_data_type
-              | VOID
-              ;
+return_type ::= type | VOID;
