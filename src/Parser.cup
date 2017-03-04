@@ -59,7 +59,7 @@ terminal           INTEGER, BOOLEAN, CHARACTER, RATIONAL, FLOAT;
 terminal           DICT, SEQ, VOID, TOP;
 
 // Keywords
-terminal           MAIN, LEN, IN, ALIAS, READ, PRINT, RETURN;
+terminal           MAIN, LEN, IN, ALIAS, READ, PRINT, RETURN, BREAK;
 
 terminal           TYPEDEF, FUNCTION_DEF;
 
@@ -67,7 +67,6 @@ terminal           IF, FI, THEN, ELSE_IF, ELSE, WHILE, FORALL, DO, OD;
 
 // TODO
 terminal           IDENTIFIER, ID, NUMBER;
-
 
 // types
 non terminal       type, number, subtype, dicttype, seqtype;
@@ -79,6 +78,8 @@ non terminal       value, dictvalue, seqvalue, dictitems, seqitems, val;
 
 non terminal       program, main, codeblock;
 
+non terminal       break;
+
 non terminal       expression, operator, comparator;
 
 
@@ -89,7 +90,7 @@ precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 
 /* ------------Grammar----------- */
 
-program ::= main | declaration program | expression program |;
+program ::= main | declaration program | expression program | break program |;
 
 main ::= MAIN L_CURLY R_CURLY SEMI;
 
@@ -126,3 +127,5 @@ expression ::= NUMBER
             |  expression comparator expression
             |  NOT expression
             |  L_ROUND expression R_ROUND;
+
+break ::= BREAK SEMI | BREAK NUMBER SEMI;
