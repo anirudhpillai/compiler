@@ -39,19 +39,17 @@ terminal           MAIN, LEN, IN, ALIAS, READ, PRINT, RETURN, BREAK;
 
 terminal           TYPEDEF, FUNCTION_DEF;
 
-terminal           IF, FI, THEN, ELSE_IF, ELSE, FORALL, DO, OD, LOOP, POOL;
+terminal           IF, FI, THEN, ELSE_IF, ELSE, LOOP, POOL;
 
 // TODO
-terminal           IDENTIFIER, ID, NUMBER;
+terminal           IDENTIFIER, NUMBER;
 
 // types
 non terminal       type, number, subtype, dicttype, seqtype;
 
 non terminal       primitive_data_type, aggregate_data_type, return_type;
 
-non terminal       declaration, declaration_list, _declaration_list;
-
-non terminal       statement, statements;
+non terminal       assignment, declaration, params, _params;
 
 // values
 non terminal       value, dictvalue, seqvalue, dictitems, seqitems, val;
@@ -64,45 +62,56 @@ non terminal       expression, operator, comparator;
 
 non terminal       read, print;
 
-non terminal       if_statement;
+non terminal       if_statement, return_statement;
 
-non terminal       function, function_call;
+non terminal       function;
 
 
 /* ------------Precedences----------- */
 precedence left OR, PLUS, MINUS;
 precedence left AND, TIMES, DIVIDE;
+precedence right IN;
 precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 
 /* ------------Grammar----------- */
 
-program ::= main | declaration program | expression program | if_statement program
-        | break program
-        | loop program
-        | read program
-        | print program
-        |
-        ;
+// This should be the final program grammar
+// program ::= codeblock main codeblock;
 
-main ::= MAIN L_CURLY R_CURLY SEMI;
+program ::= codeblock | main;
 
-codeblock ::= expression codeblock | declaration codeblock
+main ::= MAIN L_CURLY codeblock R_CURLY SEMI;
+
+codeblock ::= declaration SEMI codeblock
+            | assignment codeblock
             | loop codeblock
+            | function codeblock
+            | if_statement codeblock
+            | return_statement codeblock
+            | read codeblock
+            | print codeblock
             |
             ;
 
-declaration_list ::= _declaration_list
-                   |
-                   ;
 
-_declaration_list ::= declaration COMMA _declaration_list
-                    | declaration
-                    ;
+_params ::= declaration
+        | declaration COMMA _params
+        ;
 
-declaration ::= IDENTIFIER COLON type SEMI
-             |  IDENTIFIER COLON type EQ value SEMI;
+params ::= _params |;
 
+declaration ::= IDENTIFIER COLON type;
+assignment ::=  IDENTIFIER COLON type EQ value SEMI;
+
+
+// types
 type ::= number | dicttype | seqtype | CHARACTER;
+
+number ::= INTEGER | RATIONAL | FLOAT;
+subtype ::= number | BOOLEAN | CHARACTER | TOP;
+
+dicttype ::= DICT L_ANGLE subtype COMMA subtype R_ANGLE;
+seqtype ::= SEQ L_ANGLE subtype R_ANGLE;
 
 primitive_data_type ::= INTEGER
                     | BOOLEAN
@@ -111,23 +120,20 @@ primitive_data_type ::= INTEGER
                     | FLOAT
                     ;
 
-aggregate_data_type ::= DICT
-                    | SEQ
+aggregate_data_type ::= dicttype
+                    | seqtype
                     ;
 
-value ::= dictvalue | seqvalue | NUMBER;
-
-loop ::= LOOP codeblock POOL | LOOP codeblock break codeblock POOL;
-
-// types
-number ::= INTEGER | RATIONAL | FLOAT;
-subtype ::= number | BOOLEAN | CHARACTER | TOP;
-
-dicttype ::= DICT L_ANGLE subtype COMMA subtype R_ANGLE;
-seqtype ::= SEQ L_ANGLE subtype R_ANGLE;
 
 // values
+
+// TODO: Need to handle case where
+// a variable can be assigned value after calculation
+// a : int := 4-5;
+// a : bool := 2 - 2314 * -7 && 2 / 5;
+
 val ::= NUMBER | CHARACTER;
+value ::= dictvalue | seqvalue | NUMBER;
 
 dictvalue ::= L_CURLY dictitems R_CURLY | L_CURLY R_CURLY;
 dictitems ::= val COLON val | val COLON val COMMA dictitems;
@@ -135,46 +141,40 @@ dictitems ::= val COLON val | val COLON val COMMA dictitems;
 seqvalue ::= L_SQUARE seqitems R_SQUARE | L_SQUARE R_SQUARE;
 seqitems ::= val | val COMMA seqitems;
 
-operator ::= PLUS | MINUS | TIMES | DIVIDE;
-comparator ::= AND | OR | EQEQ | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
 
-print ::= PRINT expression SEMI;
-
-read ::= READ IDENTIFIER SEMI;
-
-expression ::= IDENTIFIER
-            |  NUMBER
-            |  NUMBER operator expression
+// Expression
+expression ::= expression operator expression
             |  expression comparator expression
             |  NOT expression
             |  L_ROUND expression R_ROUND
             |  val IN IDENTIFIER
             |  val IN dictvalue
+            |  NUMBER
+            |  IDENTIFIER
             ;
 
+operator ::= PLUS | MINUS | TIMES | DIVIDE;
+comparator ::= AND | OR | EQEQ | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
+
+
+// I/O
+print ::= PRINT expression SEMI;
+read ::= READ IDENTIFIER SEMI;
+
+// loop
+loop ::= LOOP codeblock POOL | LOOP codeblock break codeblock POOL;
 break ::= BREAK SEMI | BREAK NUMBER SEMI;
 
 if_statement ::= IF L_ROUND expression R_ROUND THEN codeblock FI
               |  IF L_ROUND expression R_ROUND THEN codeblock ELSE codeblock FI
               ;
 
+return_statement ::= RETURN SEMI | RETURN expression SEMI;
+
 //Functions
-function ::= FUNCTION_DEF IDENTIFIER L_ROUND declaration_list R_ROUND L_CURLY statements R_CURLY COLON return_type SEMI;
+function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY COLON return_type SEMI;
 
 return_type ::= primitive_data_type
               | aggregate_data_type
               | VOID
               ;
-
-statements ::= statements statement
-             |
-             ;
-
-statement ::= function_call SEMI
-            | RETURN expression SEMI
-            | declaration SEMI
-            | if_statement
-            | RETURN SEMI
-            | read SEMI
-            | print SEMI
-            ;

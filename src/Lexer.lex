@@ -138,8 +138,6 @@ Identifier = [:jletter:]{AlphanumericUnderscore}*
     "then"             { System.out.print(" then ");   return symbol(sym.THEN); }
     "elif"             { System.out.print(" elif ");   return symbol(sym.ELSE_IF); }
     "else"             { System.out.print(" else ");   return symbol(sym.ELSE); }
-    "do"               { System.out.print(" do ");     return symbol(sym.DO); }
-    "od"               { System.out.print(" od ");     return symbol(sym.OD); }
     "read"             { System.out.print(" read ");   return symbol(sym.READ); }
     "print"            { System.out.print(" print ");  return symbol(sym.PRINT); }
     "return"           { System.out.print(" return "); return symbol(sym.RETURN); }
@@ -152,6 +150,7 @@ Identifier = [:jletter:]{AlphanumericUnderscore}*
     {Number}           { System.out.print(yytext());  return symbol(sym.NUMBER); }
     {Character}        { System.out.print(yytext()); return symbol(sym.CHARACTER); }
     {Identifier}       { System.out.print(yytext()); return symbol(sym.IDENTIFIER);}
+    {Comment}          { /* just skip what was found, do nothing */ }
     {WhiteSpace}       { /* just skip what was found, do nothing */ }
 }
 
