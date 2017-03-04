@@ -82,6 +82,8 @@ non terminal       break, loop;
 
 non terminal       expression, operator, comparator;
 
+non terminal       read, print;
+
 non terminal       if_statement;
 
 
@@ -95,7 +97,9 @@ precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 
 program ::= main | declaration program | expression program | if_statement program
         | break program
-        | loop program 
+        | loop program
+        | read program
+        | print program
         |;
 
 main ::= MAIN L_CURLY R_CURLY SEMI;
@@ -130,6 +134,10 @@ seqitems ::= val | val COMMA seqitems;
 
 operator ::= PLUS | MINUS | TIMES | DIVIDE;
 comparator ::= AND | OR | EQEQ | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
+
+print ::= PRINT expression SEMI;
+
+read ::= READ IDENTIFIER SEMI;
 
 expression ::= IDENTIFIER
             |  NUMBER
