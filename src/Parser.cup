@@ -66,6 +66,8 @@ non terminal       read, print;
 
 non terminal       if_statement;
 
+non terminal       function, function_call;
+
 
 /* ------------Precedences----------- */
 precedence left OR, PLUS, MINUS;
@@ -102,14 +104,14 @@ declaration ::= IDENTIFIER COLON type SEMI
 
 type ::= number | dicttype | seqtype | CHARACTER;
 
-primitive_data_type = INTEGER
+primitive_data_type ::= INTEGER
                     | BOOLEAN
                     | CHARACTER
                     | RATIONAL
                     | FLOAT
                     ;
 
-aggregate_data_type = DICT
+aggregate_data_type ::= DICT
                     | SEQ
                     ;
 
@@ -169,9 +171,9 @@ statements ::= statements statement
              ;
 
 statement ::= function_call SEMI
-            | RETURN exp SEMI
-            | assignment SEMI
-            | control_flow
+            | RETURN expression SEMI
+            | declaration SEMI
+            | if_statement
             | RETURN SEMI
             | read SEMI
             | print SEMI
