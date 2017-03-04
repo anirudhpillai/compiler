@@ -70,8 +70,9 @@ terminal           IDENTIFIER, ID, NUMBER;
 
 // types
 non terminal       type, number, subtype, dicttype, seqtype;
-
-non terminal       declaration;
+non terminal       primitive_data_type, aggregate_data_type, return_type;
+non terminal       declaration, declaration_list, _declaration_list;
+non terminal       statement, statements;
 
 // values
 non terminal       value, dictvalue, seqvalue, dictitems, seqitems, val;
@@ -92,7 +93,6 @@ precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 
 /* ------------Grammar----------- */
 
-
 program ::= main | declaration program | expression program | if_statement program | break program |;
 
 main ::= MAIN L_CURLY R_CURLY SEMI;
@@ -100,10 +100,29 @@ main ::= MAIN L_CURLY R_CURLY SEMI;
 codeblock ::= expression codeblock | declaration codeblock
             | ;
 
+declaration_list ::= _declaration_list
+                   | ;
+
+_declaration_list ::= declaration COMMA _declaration_list
+                    | declaration
+                    ;
+
 declaration ::= IDENTIFIER COLON type SEMI
              |  IDENTIFIER COLON type EQ value SEMI;
 
 type ::= number | dicttype | seqtype | CHARACTER;
+
+primitive_data_type = INTEGER
+                    | BOOLEAN
+                    | CHARACTER
+                    | RATIONAL
+                    | FLOAT
+                    ;
+
+aggregate_data_type = DICT
+                    | SEQ
+                    ;
+
 value ::= dictvalue | seqvalue | NUMBER;
 
 // types
@@ -136,3 +155,25 @@ break ::= BREAK SEMI | BREAK NUMBER SEMI;
 
 if_statement ::= IF L_ROUND expression R_ROUND THEN codeblock FI
               |  IF L_ROUND expression R_ROUND THEN codeblock ELSE codeblock FI;
+
+
+//Functions
+function ::= FUNCTION_DEF IDENTIFIER L_ROUND declaration_list R_ROUND L_CURLY statements R_CURLY COLON return_type SEMI;
+
+return_type ::= primitive_data_type
+              | aggregate_data_type
+              | VOID
+              ;
+
+statements ::= statements statement
+             |
+             ;
+
+statement ::= function_call SEMI
+            | RETURN exp SEMI
+            | assignment SEMI
+            | control_flow
+            | RETURN SEMI
+            | read SEMI
+            | print SEMI
+            ;
