@@ -145,6 +145,7 @@ Identifier = [:jletter:]{AlphanumericUnderscore}*
     "read"             { System.out.print(" read ");   return symbol(sym.READ); }
     "print"            { System.out.print(" print ");  return symbol(sym.PRINT); }
     "return"           { System.out.print(" return "); return symbol(sym.RETURN); }
+    "break"            { System.out.print(" return "); return symbol(sym.BREAK); }
 
     //Literals
     {Number}           { System.out.print(yytext());  return symbol(sym.NUMBER); }
