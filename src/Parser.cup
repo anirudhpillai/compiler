@@ -81,6 +81,8 @@ non terminal       program, main, codeblock;
 
 non terminal       expression, operator, comparator;
 
+non terminal       if_statement;
+
 
 /* ------------Precedences----------- */
 precedence left OR, PLUS, MINUS;
@@ -89,7 +91,7 @@ precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 
 /* ------------Grammar----------- */
 
-program ::= main | declaration program | expression program |;
+program ::= main | declaration program | expression program | if_statement program |;
 
 main ::= MAIN L_CURLY R_CURLY SEMI;
 
@@ -121,8 +123,12 @@ seqitems ::= val | val COMMA seqitems;
 operator ::= PLUS | MINUS | TIMES | DIVIDE;
 comparator ::= AND | OR | EQEQ | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
 
-expression ::= NUMBER
+expression ::= IDENTIFIER
+            |  NUMBER
             |  NUMBER operator expression
             |  expression comparator expression
             |  NOT expression
             |  L_ROUND expression R_ROUND;
+
+if_statement ::= IF L_ROUND expression R_ROUND THEN codeblock FI
+              |  IF L_ROUND expression R_ROUND THEN codeblock ELSE codeblock FI;
