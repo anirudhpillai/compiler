@@ -31,7 +31,7 @@ terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE, L_SQUAR
 terminal           L_ANGLE_EQ, R_ANGLE_EQ, AND, OR, NOT, NOT_EQ;
 
 // Types
-terminal           INTEGER, BOOLEAN, CHARACTER, RATIONAL, FLOAT;
+terminal           INTEGER, BOOLEAN, RATIONAL, FLOAT, CHARACTER;
 terminal           DICT, SEQ, VOID, TOP;
 
 // Keywords
@@ -64,6 +64,8 @@ non terminal       if_statement, return_statement;
 
 non terminal       function, return_type;
 
+non terminal       tdef;
+
 
 /* ------------Precedences----------- */
 precedence left OR, PLUS, MINUS;
@@ -73,10 +75,7 @@ precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 
 /* ------------Grammar----------- */
 
-// This should be the final program grammar
-// program ::= codeblock main codeblock;
-
-program ::= codeblock | main;
+program ::= codeblock main codeblock;
 
 main ::= MAIN L_CURLY codeblock R_CURLY SEMI;
 
@@ -88,6 +87,7 @@ codeblock ::= declaration SEMI codeblock
             | return_statement codeblock
             | read codeblock
             | print codeblock
+            | tdef codeblock
             |
             ;
 
@@ -103,10 +103,13 @@ assignment ::=  IDENTIFIER COLON type EQ value SEMI;
 
 
 // types
-type ::= number | dicttype | seqtype | CHARACTER;
+// As type can be custom made using tdef, we need to include identifiers
+type ::= number | dicttype | seqtype | CHARACTER | IDENTIFIER;
 
 number ::= INTEGER | RATIONAL | FLOAT;
-subtype ::= number | BOOLEAN | CHARACTER | TOP;
+
+// As type can be custom made using tdef, we need to include identifiers
+subtype ::= number | BOOLEAN | CHARACTER | TOP | IDENTIFIER;
 
 dicttype ::= DICT L_ANGLE subtype COMMA subtype R_ANGLE;
 seqtype ::= SEQ L_ANGLE subtype R_ANGLE;
@@ -159,3 +162,6 @@ return_statement ::= RETURN SEMI | RETURN expression SEMI;
 //Functions
 function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY COLON return_type SEMI;
 return_type ::= type | VOID;
+
+// Typedef
+tdef ::= TYPEDEF IDENTIFIER L_CURLY params R_CURLY SEMI;
