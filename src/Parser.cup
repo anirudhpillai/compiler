@@ -23,7 +23,7 @@ parser code {:
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
 
 
-terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, CARET, COLON, COMMA, QUESTION;
+terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, IMPLY, CARET, COLON, COMMA, QUESTION;
 
 // Brackets
 terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE, L_SQUARE, R_SQUARE;
@@ -62,7 +62,7 @@ non terminal       read, print;
 
 non terminal       if_statement, return_statement;
 
-non terminal       function, return_type, function_call, args, _args;
+non terminal       function, return_type, function_call, args, _args, expression_or_null;
 
 non terminal       tdef;
 
@@ -75,6 +75,7 @@ precedence left AND, TIMES, DIVIDE;
 precedence left CONCAT;
 precedence right IN;
 precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
+precedence nonassoc IMPLY;
 
 /* ------------Grammar----------- */
 
@@ -110,9 +111,11 @@ identifier ::= IDENTIFIER
              // indexing
              | IDENTIFIER L_SQUARE expression R_SQUARE
              // slicing
-             | IDENTIFIER L_SQUARE expression COLON expression R_SQUARE
+             | IDENTIFIER L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
              | function_call
              ;
+
+expression_or_null ::= expression |;
 
 _args ::= expression | expression COMMA _args;
 args ::= _args | ;
@@ -167,7 +170,7 @@ expression ::= expression operator expression
 
 
 operator ::= PLUS | MINUS | TIMES | DIVIDE;
-comparator ::= AND | OR | EQEQ | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
+comparator ::= AND | OR | EQEQ | IMPLY | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
 
 
 // I/O

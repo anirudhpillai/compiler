@@ -108,6 +108,7 @@ String = \"(\\.|[^\"])*\"
     "}"                { System.out.print(" } ");  return symbol(sym.R_CURLY); }
     "["                { System.out.print(" [ ");  return symbol(sym.L_SQUARE); }
     "]"                { System.out.print(" ] ");  return symbol(sym.R_SQUARE); }
+    "=>"               { System.out.print(" < ");  return symbol(sym.IMPLY); }
     "<="               { System.out.print(" < ");  return symbol(sym.L_ANGLE_EQ); }
     ">="               { System.out.print(" > ");  return symbol(sym.R_ANGLE_EQ); }
     "<"                { System.out.print(" < ");  return symbol(sym.L_ANGLE); }
