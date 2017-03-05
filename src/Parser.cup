@@ -90,6 +90,7 @@ codeblock ::= declaration SEMI codeblock
             | read codeblock
             | print codeblock
             | tdef codeblock
+            | break codeblock
             |
             ;
 
@@ -138,6 +139,7 @@ expression ::= expression operator expression
             |  L_ROUND expression R_ROUND
             |  dictvalue
             |  seqvalue
+            |  BOOLEAN
             |  NUMBER
             |  CHARACTER
             |  IDENTIFIER
@@ -153,7 +155,7 @@ print ::= PRINT expression SEMI;
 read ::= READ IDENTIFIER SEMI;
 
 // loop
-loop ::= LOOP codeblock POOL | LOOP codeblock break codeblock POOL;
+loop ::= LOOP codeblock POOL;
 break ::= BREAK SEMI | BREAK NUMBER SEMI;
 
 if_statement ::= IF L_ROUND expression R_ROUND THEN codeblock FI

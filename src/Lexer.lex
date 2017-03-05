@@ -120,7 +120,6 @@ String = \"(\\.|[^\"])*\"
 
     //Types
     "int"              { System.out.print(" int ");     return symbol(sym.INTEGER); }
-    "bool"             { System.out.print(" bool ");    return symbol(sym.BOOLEAN); }
     "char"             { System.out.print(" char ");    return symbol(sym.CHARACTER); }
     "rat"              { System.out.print(" rat ");     return symbol(sym.RATIONAL); }
     "float"            { System.out.print(" float ");   return symbol(sym.FLOAT); }
@@ -150,6 +149,7 @@ String = \"(\\.|[^\"])*\"
 
 
     //Literals
+    {Boolean}          { System.out.print(yytext());  return symbol(sym.BOOLEAN); }
     {String}           { System.out.print(yytext());  return symbol(sym.STRING); }
     {Number}           { System.out.print(yytext());  return symbol(sym.NUMBER); }
     {Character}        { System.out.print(yytext()); return symbol(sym.CHARACTER); }
