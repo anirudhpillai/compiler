@@ -66,6 +66,8 @@ non terminal       function, return_type;
 
 non terminal       tdef;
 
+non terminal       identifier;
+
 
 /* ------------Precedences----------- */
 precedence left OR, PLUS, MINUS;
@@ -76,7 +78,7 @@ precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 
 /* ------------Grammar----------- */
 
-program ::= codeblock main codeblock;
+program ::= codeblock main codeblock | codeblock;
 
 main ::= MAIN L_CURLY codeblock R_CURLY SEMI;
 
@@ -96,14 +98,21 @@ codeblock ::= declaration SEMI codeblock
 
 
 _params ::= declaration
-        | declaration COMMA _params
-        ;
+          | declaration COMMA _params
+          ;
 
 params ::= _params |;
 
+// Identifier
+// to handle slices as well
+
+identifier ::= IDENTIFIER
+             | IDENTIFIER L_SQUARE expression R_SQUARE
+             | IDENTIFIER L_SQUARE expression COLON expression R_SQUARE;
+
 declaration ::= IDENTIFIER COLON type;
-assignment ::=  IDENTIFIER COLON type EQ value SEMI
-            |   IDENTIFIER EQ value SEMI;
+assignment ::= IDENTIFIER COLON type EQ value SEMI
+             | identifier EQ value SEMI;
 
 
 // types
@@ -123,27 +132,27 @@ value ::= expression | expression COMMA value;
 
 dictvalue ::= L_CURLY dictitems R_CURLY | L_CURLY R_CURLY;
 dictitems ::= expression COLON expression
-           |  expression COLON expression COMMA dictitems;
+            | expression COLON expression COMMA dictitems;
 
 seqvalue ::= L_SQUARE seqitems R_SQUARE
-          |  L_SQUARE R_SQUARE
-          |  STRING;
+           | L_SQUARE R_SQUARE
+           | STRING;
 seqitems ::= expression | expression COMMA seqitems;
 
 // Expression
 expression ::= expression operator expression
-            |  expression comparator expression
-            |  expression CONCAT expression
-            |  expression IN expression
-            |  NOT expression
-            |  L_ROUND expression R_ROUND
-            |  dictvalue
-            |  seqvalue
-            |  BOOLEAN
-            |  NUMBER
-            |  CHARACTER
-            |  IDENTIFIER
-            ;
+             | expression comparator expression
+             | expression CONCAT expression
+             | expression IN expression
+             | NOT expression
+             | L_ROUND expression R_ROUND
+             | dictvalue
+             | seqvalue
+             | BOOLEAN
+             | NUMBER
+             | CHARACTER
+             | identifier
+             ;
 
 
 operator ::= PLUS | MINUS | TIMES | DIVIDE;
@@ -152,15 +161,15 @@ comparator ::= AND | OR | EQEQ | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | N
 
 // I/O
 print ::= PRINT expression SEMI;
-read ::= READ IDENTIFIER SEMI;
+read ::= READ identifier SEMI;
 
 // loop
 loop ::= LOOP codeblock POOL;
 break ::= BREAK SEMI | BREAK NUMBER SEMI;
 
 if_statement ::= IF L_ROUND expression R_ROUND THEN codeblock FI
-              |  IF L_ROUND expression R_ROUND THEN codeblock ELSE codeblock FI
-              ;
+               | IF L_ROUND expression R_ROUND THEN codeblock ELSE codeblock FI
+               ;
 
 return_statement ::= RETURN SEMI | RETURN expression SEMI;
 
