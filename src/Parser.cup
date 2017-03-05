@@ -23,7 +23,7 @@ parser code {:
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
 
 
-terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, CARET, COLON, COMMA;
+terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, CARET, COLON, COMMA, QUOTE;
 
 // Brackets
 terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE, L_SQUARE, R_SQUARE;
@@ -50,7 +50,7 @@ non terminal       type, number, subtype, dicttype, seqtype;
 non terminal       assignment, declaration, params, _params;
 
 // values
-non terminal       value, dictvalue, seqvalue, dictitems, seqitems, val;
+non terminal       value, _value, dictvalue, seqvalue, dictitems, seqitems, val;
 
 non terminal       program, main, codeblock;
 
@@ -120,13 +120,14 @@ seqtype ::= SEQ L_ANGLE subtype R_ANGLE;
 // a : int := 4-5;
 // a : bool := 2 - 2314 * -7 && 2 / 5;
 
-val ::= NUMBER | CHARACTER;
-value ::= dictvalue | seqvalue | NUMBER;
+val ::= NUMBER | CHARACTER | IDENTIFIER;
+_value ::= dictvalue | seqvalue | val;
+value ::= _value | _value COMMA value;
 
 dictvalue ::= L_CURLY dictitems R_CURLY | L_CURLY R_CURLY;
 dictitems ::= val COLON val | val COLON val COMMA dictitems;
 
-seqvalue ::= L_SQUARE seqitems R_SQUARE | L_SQUARE R_SQUARE;
+seqvalue ::= L_SQUARE seqitems R_SQUARE | L_SQUARE R_SQUARE | QUOTE IDENTIFIER QUOTE;
 seqitems ::= val | val COMMA seqitems;
 
 

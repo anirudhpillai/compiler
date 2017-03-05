@@ -68,8 +68,6 @@ EndOfLineComment = "#" {InputCharacter}* {LineTerminator}?
 AlphanumericUnderscore = [:jletterdigit:] | "_"
 Identifier = [:jletter:]{AlphanumericUnderscore}*
 
-%state STRING, CHAR
-
 %%
 /* ------------------------Lexical Rules Section---------------------- */
 
@@ -112,6 +110,7 @@ Identifier = [:jletter:]{AlphanumericUnderscore}*
     ">"                { System.out.print(" > ");  return symbol(sym.R_ANGLE); }
     "^"                { System.out.print(" ^ "); return symbol(sym.CARET); }
     ","                { System.out.print(" , "); return symbol(sym.COMMA); }
+    "\""               { System.out.print(yytext()); return symbol(sym.QUOTE); }
 
     //hmm
 
