@@ -86,75 +86,75 @@ String = \"(\\.|[^\"])*\"
 <YYINITIAL> {
 
     //End statement
-    ";"                { System.out.print(" ; ");  return symbol(sym.SEMI); }
+    ";"                { return symbol(sym.SEMI); }
 
     //Operators
 
-    ":="               { System.out.print(" := ");  return symbol(sym.EQ); }
-    "::"               { System.out.print(" :: ");  return symbol(sym.CONCAT); }
-    ":"                { System.out.print(" : ");  return symbol(sym.COLON); }
-    "="                { System.out.print(" = "); return symbol(sym.EQEQ); }
-    "!="               { System.out.print(" != "); return symbol(sym.NOT_EQ); }
-    "&&"               { System.out.print(" && ");  return symbol(sym.AND); }
-    "||"               { System.out.print(" || ");  return symbol(sym.OR); }
-    "!"                { System.out.print(" ! ");  return symbol(sym.NOT); }
-    "+"                { System.out.print(" + ");  return symbol(sym.PLUS); }
-    "-"                { System.out.print(" - ");  return symbol(sym.MINUS); }
-    "*"                { System.out.print(" * ");  return symbol(sym.TIMES); }
-    "/"                { System.out.print(" / ");  return symbol(sym.DIVIDE); }
-    "("                { System.out.print(" ( ");  return symbol(sym.L_ROUND); }
-    ")"                { System.out.print(" ) ");  return symbol(sym.R_ROUND); }
-    "{"                { System.out.print(" { ");  return symbol(sym.L_CURLY); }
-    "}"                { System.out.print(" } ");  return symbol(sym.R_CURLY); }
-    "["                { System.out.print(" [ ");  return symbol(sym.L_SQUARE); }
-    "]"                { System.out.print(" ] ");  return symbol(sym.R_SQUARE); }
-    "=>"               { System.out.print(" < ");  return symbol(sym.IMPLY); }
-    "<="               { System.out.print(" < ");  return symbol(sym.L_ANGLE_EQ); }
-    ">="               { System.out.print(" > ");  return symbol(sym.R_ANGLE_EQ); }
-    "<"                { System.out.print(" < ");  return symbol(sym.L_ANGLE); }
-    ">"                { System.out.print(" > ");  return symbol(sym.R_ANGLE); }
-    "^"                { System.out.print(" ^ "); return symbol(sym.CARET); }
-    ","                { System.out.print(" , "); return symbol(sym.COMMA); }
-    "?"                { System.out.print(" ? "); return symbol(sym.QUESTION); }
+    ":="               { return symbol(sym.EQ); }
+    "::"               { return symbol(sym.CONCAT); }
+    ":"                { return symbol(sym.COLON); }
+    "="                { return symbol(sym.EQEQ); }
+    "!="               { return symbol(sym.NOT_EQ); }
+    "&&"               { return symbol(sym.AND); }
+    "||"               { return symbol(sym.OR); }
+    "!"                { return symbol(sym.NOT); }
+    "+"                { return symbol(sym.PLUS); }
+    "-"                { return symbol(sym.MINUS); }
+    "*"                { return symbol(sym.TIMES); }
+    "/"                { return symbol(sym.DIVIDE); }
+    "("                { return symbol(sym.L_ROUND); }
+    ")"                { return symbol(sym.R_ROUND); }
+    "{"                { return symbol(sym.L_CURLY); }
+    "}"                { return symbol(sym.R_CURLY); }
+    "["                { return symbol(sym.L_SQUARE); }
+    "]"                { return symbol(sym.R_SQUARE); }
+    "=>"               { return symbol(sym.IMPLY); }
+    "<="               { return symbol(sym.L_ANGLE_EQ); }
+    ">="               { return symbol(sym.R_ANGLE_EQ); }
+    "<"                { return symbol(sym.L_ANGLE); }
+    ">"                { return symbol(sym.R_ANGLE); }
+    "^"                { return symbol(sym.CARET); }
+    ","                { return symbol(sym.COMMA); }
+    "?"                { return symbol(sym.QUESTION); }
 
     //hmm
 
     //Types
-    "int"              { System.out.print(" int ");     return symbol(sym.INTEGER); }
-    "char"             { System.out.print(" char ");    return symbol(sym.CHARACTER); }
-    "rat"              { System.out.print(" rat ");     return symbol(sym.RATIONAL); }
-    "float"            { System.out.print(" float ");   return symbol(sym.FLOAT); }
-    "dict"             { System.out.print(" dict ");    return symbol(sym.DICT); }
-    "seq"              { System.out.print(" seq ");     return symbol(sym.SEQ); }
-    "void"             { System.out.print(" void ");    return symbol(sym.VOID); }
+    "int"              { return symbol(sym.INTEGER); }
+    "char"             { return symbol(sym.CHARACTER); }
+    "rat"              { return symbol(sym.RATIONAL); }
+    "float"            { return symbol(sym.FLOAT); }
+    "dict"             { return symbol(sym.DICT); }
+    "seq"              { return symbol(sym.SEQ); }
+    "void"             { return symbol(sym.VOID); }
 
     //Special words
-    "main"             { System.out.print(" main ");   return symbol(sym.MAIN); }
-    "len"              { System.out.print(" len ");    return symbol(sym.LEN); }
-    "tdef"             { System.out.print(" tdef ");   return symbol(sym.TYPEDEF); }
-    "fdef"             { System.out.print(" fdef ");   return symbol(sym.FUNCTION_DEF); }
-    "top"              { System.out.print(" top ");   return symbol(sym.TOP); }
-    "in"               { System.out.print(" in ");     return symbol(sym.IN); }
-    "alias"            { System.out.print(" alias ");  return symbol(sym.ALIAS); }
-    "if"               { System.out.print(" if ");     return symbol(sym.IF); }
-    "fi"               { System.out.print(" fi ");     return symbol(sym.FI); }
-    "then"             { System.out.print(" then ");   return symbol(sym.THEN); }
-    "elif"             { System.out.print(" elif ");   return symbol(sym.ELSE_IF); }
-    "else"             { System.out.print(" else ");   return symbol(sym.ELSE); }
-    "read"             { System.out.print(" read ");   return symbol(sym.READ); }
-    "print"            { System.out.print(" print ");  return symbol(sym.PRINT); }
-    "return"           { System.out.print(" return "); return symbol(sym.RETURN); }
-    "break"            { System.out.print(" return "); return symbol(sym.BREAK); }
-    "loop"             { System.out.print(" loop "); return symbol(sym.LOOP); }
-    "pool"             { System.out.print(" pool "); return symbol(sym.POOL); }
+    "main"             { return symbol(sym.MAIN); }
+    "len"              { return symbol(sym.LEN); }
+    "tdef"             { return symbol(sym.TYPEDEF); }
+    "fdef"             { return symbol(sym.FUNCTION_DEF); }
+    "top"              { return symbol(sym.TOP); }
+    "in"               { return symbol(sym.IN); }
+    "alias"            { return symbol(sym.ALIAS); }
+    "if"               { return symbol(sym.IF); }
+    "fi"               { return symbol(sym.FI); }
+    "then"             { return symbol(sym.THEN); }
+    "elif"             { return symbol(sym.ELSE_IF); }
+    "else"             { return symbol(sym.ELSE); }
+    "read"             { return symbol(sym.READ); }
+    "print"            { return symbol(sym.PRINT); }
+    "return"           { return symbol(sym.RETURN); }
+    "break"            { return symbol(sym.BREAK); }
+    "loop"             { return symbol(sym.LOOP); }
+    "pool"             { return symbol(sym.POOL); }
 
 
     //Literals
-    {Boolean}          { System.out.print(yytext());  return symbol(sym.BOOLEAN); }
-    {String}           { System.out.print(yytext());  return symbol(sym.STRING); }
-    {Number}           { System.out.print(yytext());  return symbol(sym.NUMBER); }
-    {Character}        { System.out.print(yytext()); return symbol(sym.CHARACTER); }
-    {Identifier}       { System.out.print(yytext()); return symbol(sym.IDENTIFIER);}
+    {Boolean}          { return symbol(sym.BOOLEAN); }
+    {String}           { return symbol(sym.STRING); }
+    {Number}           { return symbol(sym.NUMBER); }
+    {Character}        { return symbol(sym.CHARACTER); }
+    {Identifier}       { return symbol(sym.IDENTIFIER);}
     {Comment}          { /* just skip what was found, do nothing */ }
     {WhiteSpace}       { /* just skip what was found, do nothing */ }
 }
