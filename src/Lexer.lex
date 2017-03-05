@@ -93,7 +93,7 @@ String = \"(\\.|[^\"])*\"
     ":="               { System.out.print(" := ");  return symbol(sym.EQ); }
     "::"               { System.out.print(" :: ");  return symbol(sym.CONCAT); }
     ":"                { System.out.print(" : ");  return symbol(sym.COLON); }
-    "=="               { System.out.print(" == "); return symbol(sym.EQEQ); }
+    "="                { System.out.print(" = "); return symbol(sym.EQEQ); }
     "!="               { System.out.print(" != "); return symbol(sym.NOT_EQ); }
     "&&"               { System.out.print(" && ");  return symbol(sym.AND); }
     "||"               { System.out.print(" || ");  return symbol(sym.OR); }
@@ -114,7 +114,7 @@ String = \"(\\.|[^\"])*\"
     ">"                { System.out.print(" > ");  return symbol(sym.R_ANGLE); }
     "^"                { System.out.print(" ^ "); return symbol(sym.CARET); }
     ","                { System.out.print(" , "); return symbol(sym.COMMA); }
-    "\""               { System.out.print(yytext()); return symbol(sym.QUOTE); }
+    "?"                { System.out.print(" ? "); return symbol(sym.QUESTION); }
 
     //hmm
 

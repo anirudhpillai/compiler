@@ -23,7 +23,7 @@ parser code {:
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
 
 
-terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, CARET, COLON, COMMA, QUOTE;
+terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, CARET, COLON, COMMA, QUESTION;
 
 // Brackets
 terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE, L_SQUARE, R_SQUARE;
@@ -62,7 +62,7 @@ non terminal       read, print;
 
 non terminal       if_statement, return_statement;
 
-non terminal       function, return_type;
+non terminal       function, return_type, function_call, args, _args;
 
 non terminal       tdef;
 
@@ -107,12 +107,22 @@ params ::= _params |;
 // to handle slices as well
 
 identifier ::= IDENTIFIER
+             // indexing
              | IDENTIFIER L_SQUARE expression R_SQUARE
-             | IDENTIFIER L_SQUARE expression COLON expression R_SQUARE;
+             // slicing
+             | IDENTIFIER L_SQUARE expression COLON expression R_SQUARE
+             | function_call
+             ;
+
+_args ::= expression | expression COMMA _args;
+args ::= _args | ;
+function_call ::= IDENTIFIER L_ROUND args R_ROUND
+                | QUESTION expression QUESTION function_call;
 
 declaration ::= IDENTIFIER COLON type;
 assignment ::= IDENTIFIER COLON type EQ value SEMI
-             | identifier EQ value SEMI;
+             | identifier EQ value SEMI
+             ;
 
 
 // types
