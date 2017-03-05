@@ -79,7 +79,7 @@ precedence nonassoc IMPLY;
 
 /* ------------Grammar----------- */
 
-program ::= codeblock main codeblock | codeblock;
+program ::= main codeblock | codeblock main | codeblock main codeblock | main;
 
 main ::= MAIN L_CURLY codeblock R_CURLY SEMI;
 
@@ -94,7 +94,17 @@ codeblock ::= declaration SEMI codeblock
             | print codeblock
             | tdef codeblock
             | break codeblock
-            |
+            | declaration SEMI
+            | assignment
+            | expression SEMI
+            | loop
+            | function
+            | if_statement
+            | return_statement
+            | read
+            | print
+            | tdef
+            | break
             ;
 
 
