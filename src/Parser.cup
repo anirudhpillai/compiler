@@ -64,7 +64,7 @@ non terminal       if_statement, return_statement;
 
 non terminal       function, return_type, function_call, args, _args, expression_or_null;
 
-non terminal       tdef;
+non terminal       tdef, alias;
 
 non terminal       identifier;
 
@@ -93,6 +93,7 @@ codeblock ::= declaration SEMI codeblock
             | read codeblock
             | print codeblock
             | tdef codeblock
+            | alias codeblock
             | break codeblock
             |
             ;
@@ -193,3 +194,6 @@ return_type ::= COLON type |;
 
 // Typedef
 tdef ::= TYPEDEF IDENTIFIER L_CURLY params R_CURLY SEMI;
+
+// Alias
+alias ::= ALIAS type type SEMI;
