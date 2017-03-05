@@ -7,3 +7,5 @@ if ( expression ) then
 else
   a : int := 3;
 fi
+
+main {};

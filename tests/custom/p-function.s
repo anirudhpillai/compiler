@@ -6,6 +6,8 @@ fdef reverse (inseq : seq<top>) {
     return outseq;
 } : seq<top> ;
 
+main {};
+
 fdef reverse (inseq : seq<top>) {
     i : int := 0;
     loop
