@@ -65,8 +65,11 @@ EndOfLineComment = "#" {InputCharacter}* {LineTerminator}?
 
 // Identifier
 //jletterdigit predefined by flex
-AlphanumericUnderscore = [:jletterdigit:] | "_"
-Identifier = [:jletter:]{AlphanumericUnderscore}*
+AlphanumericUnderscore = {Letter} | "_" | {Digit}
+Dot = "."
+Identifier = {Letter}{AlphanumericUnderscore}*{Dot}?{AlphanumericUnderscore}*
+
+String = \"(\\.|[^\"])*\"
 
 %%
 /* ------------------------Lexical Rules Section---------------------- */
@@ -88,6 +91,7 @@ Identifier = [:jletter:]{AlphanumericUnderscore}*
     //Operators
 
     ":="               { System.out.print(" := ");  return symbol(sym.EQ); }
+    "::"               { System.out.print(" :: ");  return symbol(sym.CONCAT); }
     ":"                { System.out.print(" : ");  return symbol(sym.COLON); }
     "=="               { System.out.print(" == "); return symbol(sym.EQEQ); }
     "!="               { System.out.print(" != "); return symbol(sym.NOT_EQ); }
@@ -146,6 +150,7 @@ Identifier = [:jletter:]{AlphanumericUnderscore}*
 
 
     //Literals
+    {String}           { System.out.print(yytext());  return symbol(sym.STRING); }
     {Number}           { System.out.print(yytext());  return symbol(sym.NUMBER); }
     {Character}        { System.out.print(yytext()); return symbol(sym.CHARACTER); }
     {Identifier}       { System.out.print(yytext()); return symbol(sym.IDENTIFIER);}

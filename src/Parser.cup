@@ -35,14 +35,14 @@ terminal           INTEGER, BOOLEAN, RATIONAL, FLOAT, CHARACTER;
 terminal           DICT, SEQ, VOID, TOP;
 
 // Keywords
-terminal           MAIN, LEN, IN, ALIAS, READ, PRINT, RETURN, BREAK;
+terminal           MAIN, LEN, IN, ALIAS, READ, PRINT, RETURN, BREAK, CONCAT;
 
 terminal           TYPEDEF, FUNCTION_DEF;
 
 terminal           IF, FI, THEN, ELSE_IF, ELSE, LOOP, POOL;
 
 // TODO
-terminal           IDENTIFIER, NUMBER;
+terminal           IDENTIFIER, NUMBER, STRING;
 
 // types
 non terminal       type, number, subtype, dicttype, seqtype;
@@ -70,6 +70,7 @@ non terminal       tdef;
 /* ------------Precedences----------- */
 precedence left OR, PLUS, MINUS;
 precedence left AND, TIMES, DIVIDE;
+precedence left CONCAT;
 precedence right IN;
 precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 
@@ -81,6 +82,7 @@ main ::= MAIN L_CURLY codeblock R_CURLY SEMI;
 
 codeblock ::= declaration SEMI codeblock
             | assignment codeblock
+            | expression SEMI codeblock
             | loop codeblock
             | function codeblock
             | if_statement codeblock
@@ -99,7 +101,8 @@ _params ::= declaration
 params ::= _params |;
 
 declaration ::= IDENTIFIER COLON type;
-assignment ::=  IDENTIFIER COLON type EQ value SEMI;
+assignment ::=  IDENTIFIER COLON type EQ value SEMI
+            |   IDENTIFIER EQ value SEMI;
 
 
 // types
@@ -114,33 +117,32 @@ subtype ::= number | BOOLEAN | CHARACTER | TOP | IDENTIFIER;
 dicttype ::= DICT L_ANGLE subtype COMMA subtype R_ANGLE;
 seqtype ::= SEQ L_ANGLE subtype R_ANGLE;
 
-// values
-
-// TODO: Need to handle case where a variable can be assigned value after calculation
-// a : int := 4-5;
-// a : bool := 2 - 2314 * -7 && 2 / 5;
-
-val ::= NUMBER | CHARACTER | IDENTIFIER;
-_value ::= dictvalue | seqvalue | val;
-value ::= _value | _value COMMA value;
+// Values
+value ::= expression | expression COMMA value;
 
 dictvalue ::= L_CURLY dictitems R_CURLY | L_CURLY R_CURLY;
-dictitems ::= val COLON val | val COLON val COMMA dictitems;
+dictitems ::= expression COLON expression
+           |  expression COLON expression COMMA dictitems;
 
-seqvalue ::= L_SQUARE seqitems R_SQUARE | L_SQUARE R_SQUARE | QUOTE IDENTIFIER QUOTE;
-seqitems ::= val | val COMMA seqitems;
-
+seqvalue ::= L_SQUARE seqitems R_SQUARE
+          |  L_SQUARE R_SQUARE
+          |  STRING;
+seqitems ::= expression | expression COMMA seqitems;
 
 // Expression
 expression ::= expression operator expression
             |  expression comparator expression
+            |  expression CONCAT expression
+            |  expression IN expression
             |  NOT expression
             |  L_ROUND expression R_ROUND
-            |  val IN IDENTIFIER
-            |  val IN dictvalue
+            |  dictvalue
+            |  seqvalue
             |  NUMBER
+            |  CHARACTER
             |  IDENTIFIER
             ;
+
 
 operator ::= PLUS | MINUS | TIMES | DIVIDE;
 comparator ::= AND | OR | EQEQ | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
@@ -161,8 +163,8 @@ if_statement ::= IF L_ROUND expression R_ROUND THEN codeblock FI
 return_statement ::= RETURN SEMI | RETURN expression SEMI;
 
 //Functions
-function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY COLON return_type SEMI;
-return_type ::= type | VOID;
+function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY return_type SEMI;
+return_type ::= COLON type |;
 
 // Typedef
 tdef ::= TYPEDEF IDENTIFIER L_CURLY params R_CURLY SEMI;
