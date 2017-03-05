@@ -47,7 +47,7 @@ Character = '{Letter}' | '{Punctuation}' | '{Digit}'
 Boolean = T | F
 
 // Numbers
-Integer = -?(0|[1-9]{Digit}*)
+Integer = 0|[1-9]{Digit}*
 Float = {Integer}(\.{Digit}*)?
 Rational = ({Integer}_){Digit}"/"{Digit}* | {Integer}"/"{Digit}*
 
