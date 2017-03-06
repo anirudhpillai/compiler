@@ -1,16 +1,6 @@
-/*
-This is the jFlex code which does the lexing
-Docs here: http://jflex.de/manual.html
-Useful video: https://www.youtube.com/watch?v=IV1Rwq7ERR4
-*/
-
-/* --------------------------Usercode Section------------------------ */
-
 import java_cup.runtime.*;
 
 %%
-
-/* -----------------Options and Declarations Section----------------- */
 
 %class Lexer
 %unicode
@@ -29,42 +19,26 @@ import java_cup.runtime.*;
     }
 %}
 
-
-/*
-  Macro Declarations
-
-  These declarations are regular expressions that will be used latter
-  in the Lexical Rules Section.
-*/
-
 Letter = [A-Za-z]
 Digit = [0-9]
-
-// Character
 Punctuation = [!\"#\$%&\'()\*\+\,\-\.\/:;<=>\?@\[\]\\\^_`{}\~¦]
 Character = '{Letter}' | '{Punctuation}' | '{Digit}'
 
-Boolean = T | F
-
-// Numbers
 Integer = 0|[1-9]{Digit}*
 Float = {Integer}(\.{Digit}*)?
 Rational = ({Integer}_){Digit}"/"{Digit}* | {Integer}"/"{Digit}*
-
 Number = {Integer} | {Rational} | {Float}
 
-// Spaces
+Boolean = T | F
+
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 WhiteSpace     = {LineTerminator} | [ \t\f] //line terminator, space, tab, or line feed.
 
-// Comments
 Comment = {MultilineComment} | {EndOfLineComment}
 MultilineComment = "/#" [^#] ~"#/" | "/#" "#" + "/"
 EndOfLineComment = "#" {InputCharacter}* {LineTerminator}?
 
-// Identifier
-//jletterdigit predefined by flex
 AlphanumericUnderscore = {Letter} | "_" | {Digit}
 Dot = "."
 Identifier = {Letter}{AlphanumericUnderscore}*{Dot}?{AlphanumericUnderscore}*
@@ -72,16 +46,6 @@ Identifier = {Letter}{AlphanumericUnderscore}*{Dot}?{AlphanumericUnderscore}*
 String = \"(\\.|[^\"])*\"
 
 %%
-/* ------------------------Lexical Rules Section---------------------- */
-
-/*
-   This section contains regular expressions and actions, i.e. Java
-   code, that will be executed when the scanner matches the associated
-   regular expression. */
-
-   /* YYINITIAL is the state at which the lexer begins scanning.  So
-   these regular expressions will only be matched if the scanner is in
-   the start state YYINITIAL. */
 
 <YYINITIAL> {
 
@@ -156,7 +120,4 @@ String = \"(\\.|[^\"])*\"
     {WhiteSpace}       { /* just skip what was found, do nothing */ }
 }
 
-
-/* No token was found for the input so through an error.  Print out an
-   Illegal character message with the illegal character that was found. */
 [^]                    { throw new Error("Illegal character <"+yytext()+">"); }
