@@ -113,7 +113,6 @@ String = \"(\\.|[^\"])*\"
     ">="               { return symbol(sym.R_ANGLE_EQ); }
     "<"                { return symbol(sym.L_ANGLE); }
     ">"                { return symbol(sym.R_ANGLE); }
-    "^"                { return symbol(sym.CARET); }
     ","                { return symbol(sym.COMMA); }
     "?"                { return symbol(sym.QUESTION); }
 
@@ -126,7 +125,6 @@ String = \"(\\.|[^\"])*\"
     "float"            { return symbol(sym.FLOAT); }
     "dict"             { return symbol(sym.DICT); }
     "seq"              { return symbol(sym.SEQ); }
-    "void"             { return symbol(sym.VOID); }
 
     //Special words
     "main"             { return symbol(sym.MAIN); }
@@ -139,7 +137,6 @@ String = \"(\\.|[^\"])*\"
     "if"               { return symbol(sym.IF); }
     "fi"               { return symbol(sym.FI); }
     "then"             { return symbol(sym.THEN); }
-    "elif"             { return symbol(sym.ELSE_IF); }
     "else"             { return symbol(sym.ELSE); }
     "read"             { return symbol(sym.READ); }
     "print"            { return symbol(sym.PRINT); }
