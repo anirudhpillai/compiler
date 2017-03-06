@@ -65,6 +65,7 @@ String = \"(\\.|[^\"])*\"
     "+"                { return symbol(sym.PLUS); }
     "-"                { return symbol(sym.MINUS); }
     "*"                { return symbol(sym.TIMES); }
+    "^"                { return symbol(sym.CARET); }
     "/"                { return symbol(sym.DIVIDE); }
     "("                { return symbol(sym.L_ROUND); }
     ")"                { return symbol(sym.R_ROUND); }
@@ -92,7 +93,6 @@ String = \"(\\.|[^\"])*\"
 
     //Special words
     "main"             { return symbol(sym.MAIN); }
-    "len"              { return symbol(sym.LEN); }
     "tdef"             { return symbol(sym.TYPEDEF); }
     "fdef"             { return symbol(sym.FUNCTION_DEF); }
     "top"              { return symbol(sym.TOP); }

@@ -21,11 +21,11 @@ parser code {:
 
 
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
-terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, IMPLY, COLON, COMMA, QUESTION;
+terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, IMPLY, CARET, COLON, COMMA, QUESTION;
 terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE, L_SQUARE, R_SQUARE;
 terminal           L_ANGLE_EQ, R_ANGLE_EQ, AND, OR, NOT, NOT_EQ;
 terminal           INTEGER, BOOLEAN, RATIONAL, FLOAT, CHARACTER, DICT, SEQ, TOP;
-terminal           MAIN, LEN, IN, READ, PRINT, RETURN, BREAK, CONCAT, TYPEDEF, ALIAS, FUNCTION_DEF;
+terminal           MAIN, IN, READ, PRINT, RETURN, BREAK, CONCAT, TYPEDEF, ALIAS, FUNCTION_DEF;
 terminal           IF, FI, THEN, ELSE, LOOP, POOL;
 terminal           IDENTIFIER, NUMBER, STRING;
 
@@ -44,17 +44,16 @@ precedence left AND, TIMES, DIVIDE;
 precedence left CONCAT;
 precedence right IN;
 precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
-precedence nonassoc IMPLY;
+precedence nonassoc IMPLY, CARET;
 
 /* ------------Grammar----------- */
-
 program ::= main | codeblock main | main codeblock | codeblock main codeblock;
 
 codeblock ::= declaration codeblock
             | statement codeblock
             | function codeblock
             | declaration
-            | statement 
+            | statement
             | function
             ;
 
@@ -86,7 +85,7 @@ seqvalue ::= L_SQUARE seqitems R_SQUARE
 seqitems ::= expression | expression COMMA seqitems;
 
 // Expression
-operator ::= PLUS | MINUS | TIMES | DIVIDE;
+operator ::= PLUS | MINUS | TIMES | DIVIDE | CARET;
 comparator ::= AND | OR | EQEQ | IMPLY | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
 
 expression ::= expression operator expression
