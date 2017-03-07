@@ -39,12 +39,11 @@ non terminal       function, function_call, function_body, return_type, args, _a
 
 
 /* ------------Precedences----------- */
-precedence left OR, PLUS, MINUS;
+precedence left OR, PLUS, MINUS, IMPLY;
 precedence left AND, TIMES, DIVIDE;
 precedence left CONCAT;
-precedence right IN;
+precedence right CARET, IN;
 precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
-precedence nonassoc IMPLY, CARET;
 
 /* ------------Grammar----------- */
 program ::= main | codeblock main | main codeblock | codeblock main codeblock;
