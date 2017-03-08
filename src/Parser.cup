@@ -125,10 +125,10 @@ statement ::= loop
             | return_statement
             | read
             | print
-            | assignment_statement
+            | assignment
             ;
 
-assignment_statement ::= identifier EQ expression_list SEMI;
+assignment ::= identifier EQ expression_list SEMI;
 
 print ::= PRINT expression SEMI;
 read ::= READ identifier SEMI;
@@ -148,6 +148,6 @@ args ::= _args |;
 
 function_call ::= IDENTIFIER L_ROUND args R_ROUND | QUESTION expression QUESTION function_call;
 
-function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY return_type SEMI;
+function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY program_block R_CURLY return_type SEMI;
 
 return_type ::= COLON type |;
