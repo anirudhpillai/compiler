@@ -61,6 +61,8 @@ identifier ::= IDENTIFIER
              | IDENTIFIER L_SQUARE expression R_SQUARE
              | IDENTIFIER L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
              | function_call
+             | function_call L_SQUARE expression R_SQUARE
+             | function_call L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
              ;
 
 // Types
@@ -148,6 +150,6 @@ args ::= _args |;
 
 function_call ::= IDENTIFIER L_ROUND args R_ROUND | QUESTION expression QUESTION function_call;
 
-function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY program_block R_CURLY return_type SEMI;
+function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY return_type SEMI;
 
 return_type ::= COLON type |;
