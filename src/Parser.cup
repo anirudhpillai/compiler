@@ -44,7 +44,7 @@ non terminal       assignment_statement, program_block;
 precedence left OR, PLUS, MINUS;
 precedence left AND, TIMES, DIVIDE, IMPLY;
 precedence left CONCAT;
-precedence right CARET, IN;
+precedence right IN;
 precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 
 /* ------------Grammar----------- */
@@ -84,7 +84,7 @@ seqvalue ::= L_SQUARE seqitems R_SQUARE
 seqitems ::= expression | expression COMMA seqitems;
 
 // Expression
-operator ::= PLUS | MINUS | TIMES | DIVIDE | CARET;
+operator ::= PLUS | MINUS | TIMES | DIVIDE;
 comparator ::= AND | OR | EQEQ | IMPLY | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
 
 expression ::= expression operator expression
