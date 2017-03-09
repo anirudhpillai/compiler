@@ -37,7 +37,7 @@ non terminal       declarations, declaration, type_declaration, assignment, tdef
 non terminal       statements, statement, print, read, loop, break, if_statement, return_statement;
 non terminal       function, function_call, function_body, return_type, args, _args, params, _params;
 
-non terminal       assignment_statement, program_block, accessor;
+non terminal       assignment_statement, program_block, accessor, statements_without_return, statement_without_return;
 
 
 /* ------------Precedences----------- */
@@ -52,9 +52,9 @@ precedence nonassoc IMPLY;
 /* ------------Grammar----------- */
 program ::= program_block main program_block;
 
-program_block ::= declarations statements | declarations;
+program_block ::= declarations statements_without_return | declarations;
 
-main ::= MAIN L_CURLY codeblock R_CURLY SEMI;
+main ::= MAIN L_CURLY function_body R_CURLY SEMI;
 
 codeblock ::= declarations statements;
 
@@ -128,10 +128,10 @@ statements ::= statement statements | statement;
 statement ::= loop
             | break
             | if_statement
-            | return_statement
             | read
             | print
             | assignment
+            | return_statement
             ;
 
 assignment ::= identifier EQ expression_list SEMI;
@@ -153,6 +153,17 @@ _args ::= expression | expression COMMA _args;
 args ::= _args |;
 
 function_call ::= IDENTIFIER L_ROUND args R_ROUND | QUESTION expression QUESTION function_call;
+
+function_body ::= declarations statements;
+
+statements_without_return ::= statement_without_return statements_without_return | statement_without_return;
+statement_without_return ::= loop
+            | break
+            | if_statement
+            | read
+            | print
+            | assignment
+            ;
 
 function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY return_type SEMI;
 
