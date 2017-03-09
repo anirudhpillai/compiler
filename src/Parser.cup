@@ -42,7 +42,7 @@ non terminal       statement_with_break, statements_with_break, if_statement_wit
 
 /* ------------Precedences----------- */
 precedence left OR, PLUS, MINUS;
-precedence left AND, TIMES, DIVIDE, IMPLY;
+precedence left AND, TIMES, DIVIDE;
 precedence left CONCAT;
 precedence right IN;
 precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
