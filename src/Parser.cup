@@ -158,7 +158,6 @@ function_body ::= declarations statements;
 
 statements_without_return ::= statement_without_return statements_without_return | statement_without_return;
 statement_without_return ::= loop
-            | break
             | if_statement
             | read
             | print
