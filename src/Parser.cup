@@ -100,7 +100,7 @@ expression ::= expression operator expression
              | dictvalue
              | seqvalue
              | BOOLEAN
-             | MINUS NUMBER
+             | MINUS expression
              | NUMBER
              | CHARACTER
              | identifier
