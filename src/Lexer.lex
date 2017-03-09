@@ -26,7 +26,7 @@ Character = '{Letter}' | '{Punctuation}' | '{Digit}'
 
 Integer = 0|[1-9]{Digit}*
 Float = {Integer}(\.{Digit}*)?
-Rational = ({Integer}_){Digit}"/"{Digit}* | {Integer}"/"{Digit}*
+Rational = ({Integer}_){Digit}"/"{Digit}{Digit}* | {Integer}"/"{Digit}*
 Number = {Integer} | {Rational} | {Float}
 
 Boolean = T | F
