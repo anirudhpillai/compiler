@@ -37,33 +37,34 @@ non terminal       declarations, declaration, type_declaration, assignment, tdef
 non terminal       statements, statement, print, read, loop, break, if_statement, return_statement;
 non terminal       function, function_call, function_body, return_type, args, _args, params, _params;
 
+non terminal       assignment_statement, program_block;
+
 
 /* ------------Precedences----------- */
 precedence left OR, PLUS, MINUS;
-precedence left AND, TIMES, DIVIDE;
+precedence left AND, TIMES, DIVIDE, IMPLY;
 precedence left CONCAT;
 precedence right IN, CARET;
 precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 precedence nonassoc IMPLY;
 
+
 /* ------------Grammar----------- */
-program ::= main | codeblock main | main codeblock | codeblock main codeblock;
+program ::= program_block main program_block;
 
-codeblock ::= declaration codeblock
-            | statement codeblock
-            | function codeblock
-            | declaration
-            | statement
-            | function
-            ;
+program_block ::= declarations statements | declarations;
 
-main ::= MAIN L_CURLY function_body R_CURLY SEMI;
+main ::= MAIN L_CURLY codeblock R_CURLY SEMI;
+
+codeblock ::= declarations statements;
 
 // Identifier
 identifier ::= IDENTIFIER
              | IDENTIFIER L_SQUARE expression R_SQUARE
              | IDENTIFIER L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
              | function_call
+             | function_call L_SQUARE expression R_SQUARE
+             | function_call L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
              ;
 
 // Types
@@ -85,7 +86,7 @@ seqvalue ::= L_SQUARE seqitems R_SQUARE
 seqitems ::= expression | expression COMMA seqitems;
 
 // Expression
-operator ::= PLUS | MINUS | TIMES | DIVIDE | CARET;
+operator ::= PLUS | MINUS | TIMES | DIVIDE;
 comparator ::= AND | OR | EQEQ | IMPLY | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
 
 expression ::= expression operator expression
@@ -106,17 +107,15 @@ expression ::= expression operator expression
 expression_or_null ::= expression |;
 
 // Declarations
-declarations ::= declaration declarations |;
+declarations ::= declarations declaration|;
 declaration ::= type_declaration SEMI
-              | assignment
+			  | type_declaration EQ expression_list SEMI
               | tdef
               | alias
+              | function
               ;
 
 type_declaration ::= IDENTIFIER COLON type;
-assignment ::= IDENTIFIER COLON type EQ expression_list SEMI
-             | identifier EQ expression_list SEMI
-             ;
 
 tdef ::= TYPEDEF IDENTIFIER L_CURLY params R_CURLY SEMI;
 alias ::= ALIAS type type SEMI;
@@ -130,7 +129,10 @@ statement ::= loop
             | return_statement
             | read
             | print
+            | assignment
             ;
+
+assignment ::= identifier EQ expression_list SEMI;
 
 print ::= PRINT expression SEMI;
 read ::= READ identifier SEMI;
@@ -150,8 +152,6 @@ args ::= _args |;
 
 function_call ::= IDENTIFIER L_ROUND args R_ROUND | QUESTION expression QUESTION function_call;
 
-function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY function_body R_CURLY return_type SEMI;
-
-function_body ::= declarations statements;
+function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY return_type SEMI;
 
 return_type ::= COLON type |;
