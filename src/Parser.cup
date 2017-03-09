@@ -29,15 +29,13 @@ terminal           MAIN, IN, READ, PRINT, RETURN, BREAK, CONCAT, TYPEDEF, ALIAS,
 terminal           IF, FI, THEN, ELSE, LOOP, POOL;
 terminal           IDENTIFIER, NUMBER, STRING;
 
-non terminal       program, main, codeblock, identifier;
+non terminal       program, program_block, main, codeblock, identifier, accessor;
 non terminal       type, subtype, dicttype, seqtype;
 non terminal       expression_list, dictvalue, seqvalue, dictitems, seqitems;
 non terminal       expression, operator, comparator, expression_or_null;
 non terminal       declarations, declaration, type_declaration, assignment, tdef, alias;
 non terminal       statements, statement, print, read, loop, break, if_statement, return_statement;
-non terminal       function, function_call, function_body, return_type, args, _args, params, _params;
-
-non terminal       assignment_statement, program_block, accessor, statements_without_return, statement_without_return;
+non terminal       function, function_call, return_type, args, _args, params, _params;
 
 
 /* ------------Precedences----------- */
@@ -52,13 +50,14 @@ precedence nonassoc IMPLY;
 /* ------------Grammar----------- */
 program ::= program_block main program_block;
 
-program_block ::= declarations statements_without_return | declarations;
+program_block ::= declarations statements | declarations;
 
-main ::= MAIN L_CURLY function_body R_CURLY SEMI;
+main ::= MAIN L_CURLY codeblock R_CURLY SEMI;
 
 codeblock ::= declarations statements;
 
 // Identifier
+identifier ::= accessor DOT identifier | accessor;
 accessor ::= IDENTIFIER
              | IDENTIFIER L_SQUARE expression R_SQUARE
              | IDENTIFIER L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
@@ -66,8 +65,6 @@ accessor ::= IDENTIFIER
              | function_call L_SQUARE expression R_SQUARE
              | function_call L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
              ;
-
-identifier ::= accessor DOT identifier | accessor;
 
 // Types
 type ::= dicttype | seqtype | CHARACTER | INTEGER | RATIONAL | FLOAT | IDENTIFIER;
@@ -153,16 +150,6 @@ _args ::= expression | expression COMMA _args;
 args ::= _args |;
 
 function_call ::= QUESTION expression QUESTION IDENTIFIER L_ROUND args R_ROUND;
-
-function_body ::= declarations statements;
-
-statements_without_return ::= statement_without_return statements_without_return | statement_without_return;
-statement_without_return ::= loop
-            | if_statement
-            | read
-            | print
-            | assignment
-            ;
 
 function ::= FUNCTION_DEF IDENTIFIER L_ROUND params R_ROUND L_CURLY codeblock R_CURLY return_type SEMI;
 
