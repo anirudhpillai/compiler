@@ -65,7 +65,6 @@ String = \"(\\.|[^\"])*\"
     "+"                { return symbol(sym.PLUS); }
     "-"                { return symbol(sym.MINUS); }
     "*"                { return symbol(sym.TIMES); }
-    "^"                { return symbol(sym.CARET); }
     "/"                { return symbol(sym.DIVIDE); }
     "("                { return symbol(sym.L_ROUND); }
     ")"                { return symbol(sym.R_ROUND); }
