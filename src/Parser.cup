@@ -152,7 +152,7 @@ params ::= _params |;
 _args ::= expression | expression COMMA _args;
 args ::= _args |;
 
-function_call ::= IDENTIFIER L_ROUND args R_ROUND | QUESTION expression QUESTION function_call;
+function_call ::= QUESTION expression QUESTION IDENTIFIER L_ROUND args R_ROUND;
 
 function_body ::= declarations statements;
 
