@@ -44,8 +44,10 @@ non terminal       assignment_statement, program_block, accessor;
 precedence left OR, PLUS, MINUS;
 precedence left AND, TIMES, DIVIDE, IMPLY;
 precedence left CONCAT;
-precedence right IN;
+precedence right IN, CARET;
 precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
+precedence nonassoc IMPLY;
+
 
 /* ------------Grammar----------- */
 program ::= program_block main program_block;
