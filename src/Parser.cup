@@ -21,7 +21,7 @@ parser code {:
 
 
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
-terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, IMPLY, COLON, COMMA, QUESTION, DOT;
+terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, IMPLY, CARET, COLON, COMMA, QUESTION, DOT;
 terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE, L_SQUARE, R_SQUARE;
 terminal           L_ANGLE_EQ, R_ANGLE_EQ, AND, OR, NOT, NOT_EQ;
 terminal           INTEGER, BOOLEAN, RATIONAL, FLOAT, CHARACTER, DICT, SEQ, TOP;
@@ -44,7 +44,7 @@ non terminal       statement_with_break, statements_with_break, if_statement_wit
 precedence left OR, PLUS, MINUS;
 precedence left AND, TIMES, DIVIDE;
 precedence left CONCAT;
-precedence right IN;
+precedence right IN, CARET;
 precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 precedence nonassoc IMPLY;
 
@@ -87,7 +87,7 @@ seqvalue ::= L_SQUARE seqitems R_SQUARE
 seqitems ::= expression | expression COMMA seqitems;
 
 // Expression
-operator ::= PLUS | MINUS | TIMES | DIVIDE;
+operator ::= PLUS | MINUS | TIMES | DIVIDE | CARET;
 comparator ::= AND | OR | EQEQ | IMPLY | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
 
 expression ::= expression operator expression
