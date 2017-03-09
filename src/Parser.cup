@@ -37,6 +37,8 @@ non terminal       declarations, declaration, type_declaration, assignment, tdef
 non terminal       statements, statement, print, read, loop, break, if_statement, return_statement;
 non terminal       function, function_call, return_type, args, _args, params, _params;
 
+non terminal       statement_with_break, statements_with_break, if_statement_with_break, codeblock_with_break;
+
 
 /* ------------Precedences----------- */
 precedence left OR, PLUS, MINUS;
@@ -123,19 +125,36 @@ alias ::= ALIAS type type SEMI;
 statements ::= statement statements | statement;
 
 statement ::= loop
-            | break
             | if_statement
             | read
             | print
             | assignment
             | return_statement
             ;
+/* Experimenting */
+codeblock_with_break ::= declarations statements_with_break;
+statements_with_break ::= statement_with_break statements_with_break | statement_with_break;
+
+statement_with_break ::= loop
+            | break
+            | if_statement_with_break
+            | read
+            | print
+            | assignment
+            | return_statement
+            ;
+
+if_statement_with_break ::= IF L_ROUND expression R_ROUND THEN codeblock_with_break FI
+               | IF L_ROUND expression R_ROUND THEN codeblock_with_break ELSE codeblock_with_break FI
+               ;
+
+/* Experimenting */
 
 assignment ::= identifier EQ expression_list SEMI;
 
 print ::= PRINT expression SEMI;
 read ::= READ identifier SEMI;
-loop ::= LOOP codeblock POOL;
+loop ::= LOOP codeblock_with_break POOL;
 break ::= BREAK SEMI | BREAK NUMBER SEMI;
 return_statement ::= RETURN SEMI | RETURN expression SEMI;
 if_statement ::= IF L_ROUND expression R_ROUND THEN codeblock FI
