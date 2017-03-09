@@ -21,7 +21,7 @@ parser code {:
 
 
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
-terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, IMPLY, CARET, COLON, COMMA, QUESTION;
+terminal           SEMI, EQ, EQEQ, PLUS, MINUS, TIMES, DIVIDE, IMPLY, CARET, COLON, COMMA, QUESTION, DOT;
 terminal           L_ROUND, R_ROUND, L_CURLY, R_CURLY, L_ANGLE, R_ANGLE, L_SQUARE, R_SQUARE;
 terminal           L_ANGLE_EQ, R_ANGLE_EQ, AND, OR, NOT, NOT_EQ;
 terminal           INTEGER, BOOLEAN, RATIONAL, FLOAT, CHARACTER, DICT, SEQ, TOP;
@@ -37,7 +37,7 @@ non terminal       declarations, declaration, type_declaration, assignment, tdef
 non terminal       statements, statement, print, read, loop, break, if_statement, return_statement;
 non terminal       function, function_call, function_body, return_type, args, _args, params, _params;
 
-non terminal       assignment_statement, program_block;
+non terminal       assignment_statement, program_block, accessor;
 
 
 /* ------------Precedences----------- */
@@ -57,13 +57,15 @@ main ::= MAIN L_CURLY codeblock R_CURLY SEMI;
 codeblock ::= declarations statements;
 
 // Identifier
-identifier ::= IDENTIFIER
+accessor ::= IDENTIFIER
              | IDENTIFIER L_SQUARE expression R_SQUARE
              | IDENTIFIER L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
              | function_call
              | function_call L_SQUARE expression R_SQUARE
              | function_call L_SQUARE expression_or_null COLON expression_or_null R_SQUARE
              ;
+
+identifier ::= accessor DOT identifier | accessor;
 
 // Types
 type ::= dicttype | seqtype | CHARACTER | INTEGER | RATIONAL | FLOAT | IDENTIFIER;

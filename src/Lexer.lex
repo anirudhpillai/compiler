@@ -41,7 +41,7 @@ EndOfLineComment = "#" {InputCharacter}* {LineTerminator}?
 
 AlphanumericUnderscore = {Letter} | "_" | {Digit}
 Dot = "."
-Identifier = {Letter}{AlphanumericUnderscore}*{Dot}?{AlphanumericUnderscore}*
+Identifier = {Letter}{AlphanumericUnderscore}*
 
 String = \"(\\.|[^\"])*\"
 
@@ -80,6 +80,7 @@ String = \"(\\.|[^\"])*\"
     ">"                { return symbol(sym.R_ANGLE); }
     ","                { return symbol(sym.COMMA); }
     "?"                { return symbol(sym.QUESTION); }
+    "."                { return symbol(sym.DOT); }
 
     //hmm
 
