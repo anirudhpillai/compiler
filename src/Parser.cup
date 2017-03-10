@@ -29,7 +29,7 @@ terminal           MAIN, IN, READ, PRINT, RETURN, BREAK, CONCAT, TYPEDEF, ALIAS,
 terminal           IF, FI, THEN, ELSE, LOOP, POOL;
 terminal           IDENTIFIER, NUMBER, STRING;
 
-non terminal       program, program_block, main, codeblock, identifier, accessor;
+non terminal       program, main, codeblock, identifier, accessor;
 non terminal       type, subtype, dicttype, seqtype;
 non terminal       expression_list, dictvalue, seqvalue, dictitems, seqitems;
 non terminal       expression, operator, comparator, expression_or_null;
@@ -50,9 +50,7 @@ precedence nonassoc IMPLY;
 
 
 /* ------------Grammar----------- */
-program ::= program_block main program_block;
-
-program_block ::= declarations statements | declarations;
+program ::= declarations main declarations;
 
 main ::= MAIN L_CURLY codeblock R_CURLY SEMI;
 
