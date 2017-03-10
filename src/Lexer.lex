@@ -79,6 +79,7 @@ String = \"(\\.|[^\"])*\"
     ">"                { return symbol(sym.R_ANGLE); }
     ","                { return symbol(sym.COMMA); }
     "?"                { return symbol(sym.QUESTION); }
+    "^"                { return symbol(sym.CARET); }
     "."                { return symbol(sym.DOT); }
 
     //hmm

@@ -1,5 +1,0 @@
-tdef x {int};
-
-main {
-	;
-};

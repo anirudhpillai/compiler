@@ -44,7 +44,7 @@ non terminal       statement_with_break, statements_with_break, if_statement_wit
 precedence left OR, PLUS, MINUS;
 precedence left AND, TIMES, DIVIDE;
 precedence left CONCAT;
-precedence right IN;
+precedence right IN, CARET;
 precedence nonassoc NOT, L_ANGLE, L_ANGLE_EQ, R_ANGLE, R_ANGLE_EQ, EQEQ, NOT_EQ;
 precedence nonassoc IMPLY;
 
@@ -87,7 +87,7 @@ seqvalue ::= L_SQUARE seqitems R_SQUARE
 seqitems ::= expression | expression COMMA seqitems;
 
 // Expression
-operator ::= PLUS | MINUS | TIMES | DIVIDE;
+operator ::= PLUS | MINUS | TIMES | DIVIDE | CARET;
 comparator ::= AND | OR | EQEQ | IMPLY | L_ANGLE | R_ANGLE | L_ANGLE_EQ | R_ANGLE_EQ | NOT_EQ;
 
 expression ::= expression operator expression
@@ -132,7 +132,18 @@ statement ::= loop
             | return_statement
             | function_call SEMI
             ;
-/* Experimenting */
+
+assignment ::= identifier EQ expression_list SEMI;
+
+print ::= PRINT expression SEMI;
+read ::= READ identifier SEMI;
+loop ::= LOOP codeblock_with_break POOL;
+break ::= BREAK SEMI | BREAK NUMBER SEMI;
+return_statement ::= RETURN SEMI | RETURN expression SEMI;
+if_statement ::= IF L_ROUND expression R_ROUND THEN codeblock FI
+               | IF L_ROUND expression R_ROUND THEN codeblock ELSE codeblock FI
+               ;
+
 codeblock_with_break ::= declarations statements_with_break;
 statements_with_break ::= statement_with_break statements_with_break | statement_with_break;
 
@@ -148,19 +159,6 @@ statement_with_break ::= loop
 
 if_statement_with_break ::= IF L_ROUND expression R_ROUND THEN codeblock_with_break FI
                | IF L_ROUND expression R_ROUND THEN codeblock_with_break ELSE codeblock_with_break FI
-               ;
-
-/* Experimenting */
-
-assignment ::= identifier EQ expression_list SEMI;
-
-print ::= PRINT expression SEMI;
-read ::= READ identifier SEMI;
-loop ::= LOOP codeblock_with_break POOL;
-break ::= BREAK SEMI | BREAK NUMBER SEMI;
-return_statement ::= RETURN SEMI | RETURN expression SEMI;
-if_statement ::= IF L_ROUND expression R_ROUND THEN codeblock FI
-               | IF L_ROUND expression R_ROUND THEN codeblock ELSE codeblock FI
                ;
 
 // Functions
