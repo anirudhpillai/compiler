@@ -1,0 +1,4 @@
+Paragraph: 14
+Problem: it is not clear whether a function body can be empty or requires
+         at least one statement
+Our solution: we require all functions to have at least one statement
