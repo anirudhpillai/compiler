@@ -130,6 +130,7 @@ statement ::= loop
             | print
             | assignment
             | return_statement
+            | function_call SEMI
             ;
 /* Experimenting */
 codeblock_with_break ::= declarations statements_with_break;
@@ -142,6 +143,7 @@ statement_with_break ::= loop
             | print
             | assignment
             | return_statement
+            | function_call SEMI
             ;
 
 if_statement_with_break ::= IF L_ROUND expression R_ROUND THEN codeblock_with_break FI
